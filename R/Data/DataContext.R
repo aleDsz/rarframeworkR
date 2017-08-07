@@ -1,9 +1,13 @@
-#' DataContext class
+#' Classe para acesso ao banco de dados
+#' Manipulação de transações
+#' Conexão
+#' Execução de instrução SQL
 #'
-#' @aliases DataContext DataContext
-#' @export DataContext DataContext
-
-DataContext <- methods::setRefClass(
+#' @aliases DataContext DataContext class
+#' @importFrom methods setRefClass
+#' @export DataContext DataContext class
+#'
+DataContext <- setRefClass(
     "DataContext",
 
     fields = list(

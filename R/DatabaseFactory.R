@@ -1,9 +1,10 @@
 #' DatabaseFactory class
 #'
-#' @aliases DatabaseFactory DatabaseFactory
-#' @export DatabaseFactory DatabaseFactory
-
-DatabaseFactory <- methods::setRefClass(
+#' @aliases DatabaseFactory DatabaseFactory class
+#' @importFrom methods setRefClass
+#' @export DatabaseFactory DatabaseFactory class
+#'
+DatabaseFactory <- setRefClass(
     "DatabaseFactory",
 
     fields = list(
