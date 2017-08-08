@@ -1,11 +1,11 @@
-#' Classe para manipulação de String SQL para a função SELECT
+#' Classe para manipulação de String SQL genérica
 #'
-#' @aliases QueryBuilder
+#' @aliases DefaultQueryBuilder
 #' @importFrom methods setRefClass
-#' @exportClass QueryBuilder
+#' @exportClass DefaultQueryBuilder
 #'
-QueryBuilder <- setRefClass(
-    "QueryBuilder",
+DefaultQueryBuilder <- setRefClass(
+    "DefaultQueryBuilder",
     
     fields = list(
         

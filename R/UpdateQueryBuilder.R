@@ -7,7 +7,7 @@
 UpdateQueryBuilder <- setRefClass(
     "UpdateQueryBuilder",
     
-    contains = c("QueryBuilder"),
+    contains = c("DefaultQueryBuilder"),
     
     methods = list(
         

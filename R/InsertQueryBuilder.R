@@ -7,7 +7,7 @@
 InsertQueryBuilder <- setRefClass(
     "InsertQueryBuilder",
     
-    contains = c("QueryBuilder"),
+    contains = c("DefaultQueryBuilder"),
     
     methods = list(
         

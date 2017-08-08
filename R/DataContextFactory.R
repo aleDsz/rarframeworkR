@@ -4,11 +4,9 @@
 #' @importFrom methods setRefClass
 #' @importFrom jsonlite fromJSON
 #' @import DBI
-#' @import RMySQL
-#' @import RSQLite
-#' @import RPostgreSQL
-#' @import RSQLServer
-#' @import rJava
+#' @importFrom RMySQL MySQL
+#' @importFrom RSQLite SQLite
+#' @importFrom RPostgreSQL PostgreSQL
 #' @exportClass DataContextFactory
 #'
 DataContextFactory <- setRefClass(

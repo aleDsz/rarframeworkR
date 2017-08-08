@@ -7,7 +7,7 @@
 DeleteQueryBuilder <- setRefClass(
     "DeleteQueryBuilder",
     
-    contains = c("QueryBuilder"),
+    contains = c("DefaultQueryBuilder"),
     
     methods = list(
         
