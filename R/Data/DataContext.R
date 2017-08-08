@@ -5,6 +5,7 @@
 #'
 #' @aliases DataContext DataContext class
 #' @importFrom methods setRefClass
+#' @import DBI
 #' @export DataContext DataContext class
 #'
 DataContext <- setRefClass(
@@ -39,11 +40,79 @@ DataContext <- setRefClass(
         disconnect = function() {
             tryCatch({
                 if (!is.null(databaseConnection))
-                    databaseConnection$dbDisconnect()
+                    dbDisconnect(databaseConnection)
             }, error = function (ex) {
                 stop (ex$message)
             })
         },
+
+        beginTransaction = function() {
+            tryCatch({
+                if (is.null(databaseConnection)) {
+                    connect()
+                }
+
+                dbBegin(databaseConnection)
+            }, error = function (ex) {
+                stop (ex$message)
+            })
+        },
+
+        commitTransaction = function() {
+            tryCatch({
+                if (is.null(databaseConnection)) {
+                    stop ("Conexão não encontrada")
+                }
+
+                dbCommit(databaseConnection)
+            }, error = function (ex) {
+                stop (ex$message)
+            })
+        },
+
+        rollbackTransaction = function() {
+            tryCatch({
+                if (is.null(databaseConnection)) {
+                    stop ("Conexão não encontrada")
+                }
+
+                dbRollback(databaseConnection)
+            }, error = function (ex) {
+                stop (ex$message)
+            })
+        },
+
+        executeReader = function(sSql) {
+            tryCatch({
+                if (is.null(databaseConnection)) {
+                    connect()
+                }
+
+                rs        <- dbSendQuery(databaseConnection, sSql)
+                fetchData <- dbFetch(rs)
+                rowCount  <- dbGetRowCount(fetchData)
+                dbClearResult(rs)
+
+                return (fetchData)
+            }, error = function (ex) {
+                stop (ex$message)
+            })
+        },
+
+        executeQuery = function(sSql) {
+            tryCatch({
+                if (is.null(databaseConnection)) {
+                    connect()
+                }
+
+                rs       <- dbSendStatement(databaseConnection, sSql)
+                rowCount <- dbGetRowsAffected(rs)
+
+                dbClearResult(rs)
+            }, error = function (ex) {
+                stop (ex$message)
+            })
+        }
 
     )
 )
