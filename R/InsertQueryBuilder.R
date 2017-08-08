@@ -1,8 +1,8 @@
 #' Classe para manipulação de String SQL para a função INSERT
 #'
-#' @aliases InsertQueryBuilder InsertQueryBuilder class
+#' @aliases InsertQueryBuilder
 #' @importFrom methods setRefClass
-#' @export InsertQueryBuilder InsertQueryBuilder class
+#' @exportClass InsertQueryBuilder
 #'
 InsertQueryBuilder <- setRefClass(
     "InsertQueryBuilder",
@@ -20,7 +20,7 @@ InsertQueryBuilder <- setRefClass(
                 sSql <- c(sSql, " VALUES ")
                 sSql <- c(sSql, "(", getValueClause(), ")")
                 
-                return (sSql)
+                return (gsub("\r\n", "", paste(sSql, collapse = " ")))
             }, error = function(ex) {
                 stop (ex$message)
             })

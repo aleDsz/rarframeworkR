@@ -1,8 +1,8 @@
 #' Classe para manipulação de String SQL para a função SELECT
 #'
-#' @aliases SelectQueryBuilder SelectQueryBuilder class
+#' @aliases SelectQueryBuilder
 #' @importFrom methods setRefClass
-#' @export SelectQueryBuilder SelectQueryBuilder class
+#' @exportClass SelectQueryBuilder
 #'
 SelectQueryBuilder <- setRefClass(
     "SelectQueryBuilder",
@@ -16,20 +16,20 @@ SelectQueryBuilder <- setRefClass(
                 sSql <- character(0)
                 
                 if (length(fieldList) > 0) {
-                    sSql <- c("SELECT ", getFieldClause(), "\r\n")
+                    sSql <- c("SELECT ", trimws(getFieldClause()), "\r\n")
                 } else {
                     sSql <- "SELECT *\r\n"
                 }
                 
                 if (length(fromList) > 0) {
-                    sSql <- c(sSql, "  FROM ", getFromClause(), "\r\n")
+                    sSql <- c(sSql, " FROM ", trimws(getFromClause()), "\r\n")
                 }
                 
                 if (length(whereList) > 0) {
-                    sSql <- c(sSql, " WHERE ", getWhereClause())
+                    sSql <- c(sSql, "WHERE ", trimws(getWhereClause()))
                 }
                 
-                return (sSql)
+                return (gsub("\r\n", "", paste(sSql, collapse = " ")))
             }, error = function(ex) {
                 stop (ex$message)
             })

@@ -1,8 +1,8 @@
-#' Property class
+#' Classe para armazenar metadados dos objetos
 #'
-#' @aliases Property Property class
+#' @aliases Property
 #' @importFrom methods setRefClass
-#' @export Property Property class
+#' @exportClass Property
 #'
 Property <- setRefClass(
     "Property",

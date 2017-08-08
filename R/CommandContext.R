@@ -1,8 +1,8 @@
 #' Classe para execução de instruções SQL
 #'
-#' @aliases CommandContext CommandContext class
+#' @aliases CommandContext
 #' @importFrom methods setRefClass
-#' @export CommandContext CommandContext class
+#' @exportClass CommandContext
 #'
 CommandContext <- setRefClass(
     "CommandContext",

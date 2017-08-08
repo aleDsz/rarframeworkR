@@ -1,8 +1,8 @@
 #' Classe para manipulação de String SQL para a função SELECT
 #'
-#' @aliases SqlStatementSelect SqlStatementSelect class
+#' @aliases SqlStatementSelect
 #' @importFrom methods setRefClass
-#' @export SqlStatementSelect SqlStatementSelect class
+#' @exportClass SqlStatementSelect
 #'
 SqlStatementSelect <- setRefClass(
     "SqlStatementSelect",
@@ -21,7 +21,7 @@ SqlStatementSelect <- setRefClass(
         initialize = function(Object = NULL) {
             object <<- Object
             sSql   <<- character(1)
-        }
+        },
         
         createSql = function(isList) {
             tryCatch({

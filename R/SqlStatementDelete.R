@@ -1,11 +1,11 @@
-#' Classe para manipulação de String SQL para a função INSERT
+#' Classe para manipulação de String SQL para a função DELETE
 #'
-#' @aliases SqlStatementInsert SqlStatementInsert class
+#' @aliases SqlStatementDelete
 #' @importFrom methods setRefClass
-#' @export SqlStatementInsert SqlStatementInsert class
+#' @exportClass SqlStatementDelete
 #'
-SqlStatementInsert <- setRefClass(
-    "SqlStatementInsert",
+SqlStatementDelete <- setRefClass(
+    "SqlStatementDelete",
     
     contains = c("SqlStatement"),
     
@@ -21,21 +21,32 @@ SqlStatementInsert <- setRefClass(
         initialize = function(Object = NULL) {
             object <<- Object
             sSql   <<- character(1)
-        }
+        },
         
         createSql = function(isList) {
             tryCatch({
                 objectContext      <- ObjectContext$new(object);
                 listProps          <- objectContext$getProperties();
-                insertQueryBuilder <- InsertQueryBuilder$new()
-                insertQueryBuilder$addFrom(objectContext$getTableName())
+                listPks            <- list();
+                deleteQueryBuilder <- DeleteQueryBuilder$new()
+                deleteQueryBuilder$addFrom(objectContext$getTableName())
                 
                 for (prop in listProps) {
-                    insertQueryBuilder$addField(prop$fieldName);
-                    insertQueryBuilder$addValue(prop$value);
+                    if (!is.null(prop$value)) {
+                        if (prop$primaryKey) {
+                            listPks[length(listPks) + 1] <- prop
+                        }
+                    }
                 }
                 
-                sSql <<- insertQueryBuilder$toString()
+                if (length(listPks) == 0)
+                    stop ("Informar pelo menos 1 Primary Key")
+                
+                for (prop in listPks) {
+                    deleteQueryBuilder$addWhere(c(prop$fieldName, " ", getQuotedValue(prop$value, prop$type)));
+                }
+                
+                sSql <<- deleteQueryBuilder$toString()
             }, error = function(ex) {
                 stop (ex$message)
             })

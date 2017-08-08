@@ -1,8 +1,8 @@
 #' Classe para manipulação de String SQL para a função UPDATE
 #'
-#' @aliases UpdateQueryBuilder UpdateQueryBuilder class
+#' @aliases UpdateQueryBuilder
 #' @importFrom methods setRefClass
-#' @export UpdateQueryBuilder UpdateQueryBuilder class
+#' @exportClass UpdateQueryBuilder
 #'
 UpdateQueryBuilder <- setRefClass(
     "UpdateQueryBuilder",
@@ -20,7 +20,7 @@ UpdateQueryBuilder <- setRefClass(
                     sSql <- c(sSql, " WHERE ", getWhereClause())
                 }
                 
-                return (sSql)
+                return (gsub("\r\n", "", paste(sSql, collapse = " ")))
             }, error = function(ex) {
                 stop (ex$message)
             })

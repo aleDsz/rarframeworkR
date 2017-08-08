@@ -1,11 +1,11 @@
-#' Classe para manipulação de String SQL para a função DELETE
+#' Classe para manipulação de String SQL para a função UPDATE
 #'
-#' @aliases SqlStatementDelete SqlStatementDelete class
+#' @aliases SqlStatementUpdate
 #' @importFrom methods setRefClass
-#' @export SqlStatementDelete SqlStatementDelete class
+#' @exportClass SqlStatementUpdate
 #'
-SqlStatementDelete <- setRefClass(
-    "SqlStatementDelete",
+SqlStatementUpdate <- setRefClass(
+    "SqlStatementUpdate",
     
     contains = c("SqlStatement"),
     
@@ -21,20 +21,23 @@ SqlStatementDelete <- setRefClass(
         initialize = function(Object = NULL) {
             object <<- Object
             sSql   <<- character(1)
-        }
+        },
         
         createSql = function(isList) {
             tryCatch({
                 objectContext      <- ObjectContext$new(object);
                 listProps          <- objectContext$getProperties();
                 listPks            <- list();
-                deleteQueryBuilder <- DeleteQueryBuilder$new()
-                deleteQueryBuilder$addFrom(objectContext$getTableName())
+                listNonPks         <- list();
+                updateQueryBuilder <- UpdateQueryBuilder$new()
+                updateQueryBuilder$addFrom(objectContext$getTableName())
                 
                 for (prop in listProps) {
                     if (!is.null(prop$value)) {
                         if (prop$primaryKey) {
-                            listPks[length(listPks) + 1] <- prop
+                            listPks[length(listPks) + 1]       <- prop
+                        } else {
+                            listNonPks[length(listNonPks) + 1] <- prop
                         }
                     }
                 }
@@ -42,11 +45,16 @@ SqlStatementDelete <- setRefClass(
                 if (length(listPks) == 0)
                     stop ("Informar pelo menos 1 Primary Key")
                 
-                for (prop in listPks) {
-                    deleteQueryBuilder$addWhere(c(prop$fieldName, " ", getQuotedValue(prop$value, prop$type)));
+                for (prop in listNonPks) {
+                    updateQueryBuilder$addField(prop$fieldName);
+                    updateQueryBuilder$addValue(prop$value);
                 }
                 
-                sSql <<- deleteQueryBuilder$toString()
+                for (prop in listPks) {
+                    updateQueryBuilder$addWhere(c(prop$fieldName, " ", getQuotedValue(prop$value, prop$type)));
+                }
+                
+                sSql <<- updateQueryBuilder$toString()
             }, error = function(ex) {
                 stop (ex$message)
             })

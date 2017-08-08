@@ -1,8 +1,8 @@
 #' Classe para manipulação de String SQL para a função DELETE
 #'
-#' @aliases DeleteQueryBuilder DeleteQueryBuilder class
+#' @aliases DeleteQueryBuilder
 #' @importFrom methods setRefClass
-#' @export DeleteQueryBuilder DeleteQueryBuilder class
+#' @exportClass DeleteQueryBuilder
 #'
 DeleteQueryBuilder <- setRefClass(
     "DeleteQueryBuilder",
@@ -20,7 +20,7 @@ DeleteQueryBuilder <- setRefClass(
                     sSql <- c(sSql, " WHERE ", getWhereClause())
                 }
                 
-                return (sSql)
+                return (paste(sSql, collapse = " "))
             }, error = function(ex) {
                 stop (ex$message)
             })

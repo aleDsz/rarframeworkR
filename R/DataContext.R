@@ -3,10 +3,10 @@
 #' Conexão
 #' Execução de instrução SQL
 #'
-#' @aliases DataContext DataContext class
+#' @aliases DataContext
 #' @importFrom methods setRefClass
 #' @import DBI
-#' @export DataContext DataContext class
+#' @exportClass DataContext
 #'
 DataContext <- setRefClass(
     "DataContext",

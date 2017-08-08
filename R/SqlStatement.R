@@ -1,9 +1,9 @@
 #' Classe para manipulação de String SQL com métodos comuns
 #' - Obter valores das propriedades pra utilizar no SQL
 #'
-#' @aliases SqlStatement SqlStatement class
+#' @aliases SqlStatement
 #' @importFrom methods setRefClass
-#' @export SqlStatement SqlStatement class
+#' @exportClass SqlStatement
 #'
 SqlStatement <- setRefClass(
     "SqlStatement",
@@ -31,9 +31,10 @@ SqlStatement <- setRefClass(
                             } else {
                                 sqlValue <- propValue
                             }
-                        }
+                        },
                         
-                        "default" = {
+                        character = ,
+                        Date      = {
                             if (startsWith(propValue, "%") | endsWith(propValue, "%")) {
                                 sqlValue <- c("LIKE ", trimws(shQuote(sqlValue)))
                             } else {

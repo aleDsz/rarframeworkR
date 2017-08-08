@@ -1,6 +1,6 @@
 #' Fabricador da classe PDO para acessar aos drivers de banco de dados
 #'
-#' @aliases DataContextFactory DataContextFactory class
+#' @aliases DataContextFactory
 #' @importFrom methods setRefClass
 #' @importFrom jsonlite fromJSON
 #' @import DBI
@@ -9,7 +9,7 @@
 #' @import RPostgreSQL
 #' @import RSQLServer
 #' @import rJava
-#' @export DataContextFactory DataContextFactory class
+#' @exportClass DataContextFactory
 #'
 DataContextFactory <- setRefClass(
     "DataContextFactory",
@@ -66,7 +66,7 @@ DataContextFactory <- setRefClass(
             }, error = function (ex) {
                 stop (ex$message)
             })
-        },
+        }
 
     )
 )

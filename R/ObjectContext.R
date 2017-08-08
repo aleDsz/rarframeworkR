@@ -1,8 +1,11 @@
-#' ObjectContext class
+#' Classe para manipulação de objetos
+#' - Obter propriedades
+#' - Obter valores
+#' - Obter objeto(s) populados
 #'
-#' @aliases ObjectContext ObjectContext class
+#' @aliases ObjectContext
 #' @importFrom methods setRefClass
-#' @export ObjectContext ObjectContext class
+#' @exportClass ObjectContext
 #'
 ObjectContext <- setRefClass(
     "ObjectContext",
@@ -21,6 +24,7 @@ ObjectContext <- setRefClass(
 
         getProperties = function() {
             tryCatch({
+                object    ->> object
                 listProps  <- list()
                 properties <- as.list(names((object$getClass())@fieldClasses))
 
@@ -38,15 +42,15 @@ ObjectContext <- setRefClass(
 
         getObject = function(dataReader = data.frame()) {
             tryCatch({
-                fieldNames <- as.list(names(dataFrame))
+                object    ->> object
                 objeto     <- NULL
                 listProps  <- getProperties()
 
                 if (!is.null(dataReader) & nrow(dataReader) > 0) {
                     objeto <- new(getTableName())
 
-                    for (i in { 1 : length(listProps) }) {
-                        object$field(listProps[i]$fieldName) <- dataReader[1, listProps[x]$fieldName]
+                    for (prop in listProps) {
+                        attr(object, prop$fieldName) <<- dataReader[1, prop$fieldName]
                     }
                 }
 
@@ -58,17 +62,17 @@ ObjectContext <- setRefClass(
 
         getObjects = function(dataReader = data.frame()) {
             tryCatch({
-                fieldNames  <- as.list(names(dataFrame))
                 objeto      <- NULL
+                object     ->> object
                 listProps   <- getProperties()
                 listObjects <- list()
 
                 if (!is.null(dataReader) & nrow(dataReader) > 0) {
                     for (i in { 1 : nrow(dataReader) }) {
                         objeto <- new(getTableName())
-
-                        for (x in { 1 : length(listProps) }) {
-                            object$field(listProps[x]$fieldName) <- dataReader[i, listProps[x]$fieldName]
+                        
+                        for (prop in listProps) {
+                            attr(objeto, prop$fieldName) <- dataReader[i, prop$fieldName]
                         }
 
                         listObjects[i] <- objeto
@@ -84,15 +88,16 @@ ObjectContext <- setRefClass(
         getCustomAttributes = function(propertyName) {
             tryCatch({
                 property <- NULL
+                object  ->> object
 
                 if (nchar(propertyName) > 0) {
                     property <- Property$new()
 
                     property$setValues(
                         propertyName,
-                        class(object$field(propertyName)),
+                        class(attr(object, propertyName)),
                         ifelse(propertyName == "id", TRUE, FALSE),
-                        object$field(propertyName)
+                        attr(object, propertyName)
                     )
                 }
 
@@ -113,9 +118,10 @@ ObjectContext <- setRefClass(
         fillObject = function(dataFrame = data.frame()) {
             tryCatch({
                 fieldNames <- as.list(names(dataFrame))
+                object ->> object
 
                 for (i in { 1 : length(fieldNames) }) {
-                    object$field(fieldNames[i]) <- dataFrame[1, fieldNames[i]]
+                    attr(object, fieldNames[i]) <<- dataFrame[1, fieldNames[i]]
                 }
 
                 return (object)

@@ -1,8 +1,8 @@
-#' DatabaseFactory class
+#' Fabricador de instâncias de Database
 #'
-#' @aliases DatabaseFactory DatabaseFactory class
+#' @aliases DatabaseFactory
 #' @importFrom methods setRefClass
-#' @export DatabaseFactory DatabaseFactory class
+#' @exportClass DatabaseFactory
 #'
 DatabaseFactory <- setRefClass(
     "DatabaseFactory",

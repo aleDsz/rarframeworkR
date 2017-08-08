@@ -1,8 +1,8 @@
 #' Classe para manipulação de String SQL para a função SELECT
 #'
-#' @aliases QueryBuilder QueryBuilder class
+#' @aliases QueryBuilder
 #' @importFrom methods setRefClass
-#' @export QueryBuilder QueryBuilder class
+#' @exportClass QueryBuilder
 #'
 QueryBuilder <- setRefClass(
     "QueryBuilder",
@@ -17,6 +17,19 @@ QueryBuilder <- setRefClass(
     ),
     
     methods = list(
+        
+        initialize = function () {
+            tryCatch({
+                
+                valueList  <<- character(1)
+                fieldList  <<- character(1)
+                fromList   <<- character(1)
+                whereList  <<- character(1)
+                
+            }, error = function(ex) {
+                stop (ex$message)
+            })
+        },
         
         addValue = function(value) {
             tryCatch({
@@ -60,14 +73,10 @@ QueryBuilder <- setRefClass(
         
         getValueClause = function() {
             tryCatch({
-                sSql  <- character(0)
-                comma <- ", "
-                
-                for (value in valueList) {
-                    sSql <- c(sSql, ifelse(is.na(value), "null", trimws(shQuote(value))), comma)
-                }
-                
-                sSql <- substring(sSql, 1, nchar(sSql) - nchar(comma))
+                sSql       <- character(0)
+                comma      <- ", "
+                valueList ->> valueList
+                sSql       <- paste(trimws(shQuote(valueList)), collapse = comma)
                 
                 return (sSql)
             }, error = function(ex) {
@@ -77,14 +86,11 @@ QueryBuilder <- setRefClass(
         
         getSetClause = function() {
             tryCatch({
-                sSql  <- character(0)
-                comma <- ",\r\n       "
-                
-                for (i in { 1 : length(valueList) }) {
-                    sSql <- c(sSql, fieldList[i], " = ", ifelse(is.na(valueList[i]), "null", trimws(shQuote(valueList[i]))), comma)
-                }
-                
-                sSql <- substring(sSql, 1, nchar(sSql) - nchar(comma))
+                sSql       <- character(0)
+                comma      <- ",\r\n       "
+                valueList ->> valueList
+                fieldList ->> fieldList
+                sSql       <- paste(fieldList, " = ", valueList, collapse = comma)
                 
                 return (sSql)
             }, error = function(ex) {
@@ -94,14 +100,9 @@ QueryBuilder <- setRefClass(
         
         getFieldClause = function() {
             tryCatch({
-                sSql  <- character(0)
-                comma <- ", "
-                
-                for (field in fieldList) {
-                    sSql <- c(sSql, field, comma)
-                }
-                
-                sSql <- substring(sSql, 1, nchar(sSql) - nchar(comma))
+                comma      <- ", "
+                fieldList ->> fieldList
+                sSql       <- paste(fieldList, collapse = comma)
                 
                 return (sSql)
             }, error = function(ex) {
@@ -111,14 +112,9 @@ QueryBuilder <- setRefClass(
         
         getFromClause = function() {
             tryCatch({
-                sSql  <- character(0)
-                comma <- ", "
-                
-                for (from in fromList) {
-                    sSql <- c(sSql, from, comma)
-                }
-                
-                sSql <- substring(sSql, 1, nchar(sSql) - nchar(comma))
+                comma     <- ", "
+                fromList ->> fromList
+                sSql      <- paste(fromList, collapse = comma)
                 
                 return (sSql)
             }, error = function(ex) {
@@ -128,14 +124,9 @@ QueryBuilder <- setRefClass(
         
         getWhereClause = function() {
             tryCatch({
-                sSql   <- character(0)
-                andSql <- "\r\n   AND "
-                
-                for (where in whereList) {
-                    sSql <- c(sSql, where, andSql)
-                }
-                
-                sSql <- substring(sSql, 1, nchar(sSql) - nchar(andSql))
+                andSql     <- "\r\n   AND "
+                whereList ->> whereList
+                sSql       <- paste(whereList, collapse = andSql)
                 
                 return (sSql)
             }, error = function(ex) {
