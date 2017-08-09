@@ -47,23 +47,22 @@ DataContextFactory <- setRefClass(
                 type = databaseConfig["type"];
 
                 switch (type,
-                    mariadb = ,
-                    mysql   = return (dbConnect(MySQL(),
-                                                user     = user,
-                                                password = pwd,
-                                                dbname   = db,
-                                                host     = host,
-                                                post     = port)),
-
-                    sqlite  = return (dbConnect(SQLite(),
-                                                host     = host)),
-
-                    pgsql   = return (dbConnect(PostgreSQL(),
-                                                user     = user,
-                                                password = pwd,
-                                                dbname   = db,
-                                                host     = host,
-                                                post     = port))
+                    mysql   = return (DBI::dbConnect(MySQL(),
+                                                     user     = user,
+                                                     password = pwd,
+                                                     dbname   = db,
+                                                     host     = host,
+                                                     post     = port)),
+                    
+                    sqlite  = return (DBI::dbConnect(SQLite(),
+                                                     host     = host)),
+                    
+                    pgsql   = return (DBI::dbConnect(PostgreSQL(),
+                                                     user     = user,
+                                                     password = pwd,
+                                                     dbname   = db,
+                                                     host     = host,
+                                                     post     = port))
                 )
             }, error = function (ex) {
                 stop (ex$message)
