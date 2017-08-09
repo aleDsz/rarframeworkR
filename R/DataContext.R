@@ -21,8 +21,55 @@ DataContext <- setRefClass(
 
         initialize = function() {
             tryCatch({
-                dataContextFactory <- DataContextFactory$new()
-                databaseConnection <<- dataContextFactory$getConnection()
+                createConnection()
+            }, error = function (ex) {
+                stop (ex$message)
+            })
+        },
+        
+        createConnection = function() {
+            tryCatch({
+                databaseConfig     <- NULL
+                
+                if (file.exists(paste0(getwd(), "/databaseConfig.json")))
+                    databaseConfig <- fromJSON(paste0(getwd(), "/databaseConfig.json"))
+                
+                databaseConnection ->> databaseConnection
+                
+                if (!is.list(databaseConfig))
+                    stop("Arquivo de configuração não encontrado: databaseConfig.json")
+                
+                host <- databaseConfig["host"]
+                port <- databaseConfig["port"]
+                user <- databaseConfig["user"]
+                pwd  <- databaseConfig["pwd"]
+                db   <- databaseConfig["db"]
+                type <- databaseConfig["type"]
+                
+                switch (type,
+                        mysql   = {
+                            databaseConnection <<- DBI::dbConnect(MySQL(),
+                                                                  user     = user,
+                                                                  password = pwd,
+                                                                  dbname   = db,
+                                                                  host     = host,
+                                                                  post     = port)
+                        },
+                        
+                        sqlite  = {
+                            databaseConnection <<- DBI::dbConnect(SQLite(),
+                                                                  host     = host)
+                        },
+                        
+                        pgsql   = {
+                            databaseConnection <<- DBI::dbConnect(PostgreSQL(),
+                                                                  user     = user,
+                                                                  password = pwd,
+                                                                  dbname   = db,
+                                                                  host     = host,
+                                                                  post     = port)
+                        }
+                )
             }, error = function (ex) {
                 stop (ex$message)
             })
@@ -30,8 +77,7 @@ DataContext <- setRefClass(
 
         connect = function() {
             tryCatch({
-                dataContextFactory <- DataContextFactory$new()
-                databaseConnection <<- dataContextFactory$getConnection()
+                createConnection()
             }, error = function (ex) {
                 stop (ex$message)
             })
@@ -92,6 +138,8 @@ DataContext <- setRefClass(
                 rowCount  <- dbGetRowCount(rs)
                 fetchData <- dbFetch(rs)
                 dbClearResult(rs)
+                
+                cat("[", as.character(Sys.Date()), "] [rarframeworkR:::DataContext$executeReader] [TRACE] - ", rowCount," registro(s) encontrado(s)")
 
                 return (fetchData)
             }, error = function (ex) {
@@ -107,6 +155,8 @@ DataContext <- setRefClass(
 
                 rs       <- dbSendStatement(databaseConnection, sSql)
                 rowCount <- dbGetRowsAffected(rs)
+                
+                cat("[", as.character(Sys.Date()), "] [rarframeworkR:::DataContext$executeQuery] [TRACE] - ", rowCount," registro(s) afetado(s)")
 
                 dbClearResult(rs)
             }, error = function (ex) {
