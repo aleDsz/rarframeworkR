@@ -40,13 +40,15 @@ DataContextFactory <- setRefClass(
                 if (is.null(databaseConfig))
                     stop("Arquivo de configuração não encontrado: databaseConfig.json")
 
-                host <- databaseConfig["host"];
-                port <- databaseConfig["port"];
-                user <- databaseConfig["user"];
-                pwd  <- databaseConfig["pwd"];
-                db   <- databaseConfig["db"];
-                type <- databaseConfig["type"];
+                host <- databaseConfig[["host"]]
+                port <- databaseConfig[["port"]]
+                user <- databaseConfig[["user"]]
+                pwd  <- databaseConfig[["pwd"]]
+                db   <- databaseConfig[["db"]]
+                type <- databaseConfig[["type"]]
 
+                cat("Conectando ao host: ", host, " do banco de dados: ", type)
+                
                 switch (type,
                     mysql   = {
                         databaseConnection <- DBI::dbConnect(MySQL(),
