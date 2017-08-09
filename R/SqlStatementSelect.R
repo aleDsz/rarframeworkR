@@ -49,7 +49,7 @@ SqlStatementSelect <- setRefClass(
                 for (prop in listProps) {
                     selectQueryBuilder$addField(prop$fieldName);
                     
-                    if (!is.null(prop$value)) {
+                    if (length(prop$value) > 0) {
                         selectQueryBuilder$addWhere(c(prop$fieldName, " ", getQuotedValue(prop$value, prop$type)));
                     }
                 }

@@ -21,10 +21,10 @@ DefaultQueryBuilder <- setRefClass(
         initialize = function () {
             tryCatch({
                 
-                valueList  <<- character(1)
-                fieldList  <<- character(1)
-                fromList   <<- character(1)
-                whereList  <<- character(1)
+                valueList  <<- character(0)
+                fieldList  <<- character(0)
+                fromList   <<- character(0)
+                whereList  <<- character(0)
                 
             }, error = function(ex) {
                 stop (ex$message)
