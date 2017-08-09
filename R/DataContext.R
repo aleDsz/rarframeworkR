@@ -36,40 +36,39 @@ DataContext <- setRefClass(
                 
                 databaseConnection ->> databaseConnection
                 
-                if (!is.list(databaseConfig))
-                    stop("Arquivo de configuração não encontrado: databaseConfig.json")
-                
-                host <- databaseConfig["host"]
-                port <- databaseConfig["port"]
-                user <- databaseConfig["user"]
-                pwd  <- databaseConfig["pwd"]
-                db   <- databaseConfig["db"]
-                type <- databaseConfig["type"]
-                
-                switch (type,
-                        mysql   = {
-                            databaseConnection <<- DBI::dbConnect(MySQL(),
-                                                                  user     = user,
-                                                                  password = pwd,
-                                                                  dbname   = db,
-                                                                  host     = host,
-                                                                  post     = port)
-                        },
-                        
-                        sqlite  = {
-                            databaseConnection <<- DBI::dbConnect(SQLite(),
-                                                                  host     = host)
-                        },
-                        
-                        pgsql   = {
-                            databaseConnection <<- DBI::dbConnect(PostgreSQL(),
-                                                                  user     = user,
-                                                                  password = pwd,
-                                                                  dbname   = db,
-                                                                  host     = host,
-                                                                  post     = port)
-                        }
-                )
+                if (is.list(databaseConfig)) {
+                    host <- databaseConfig["host"]
+                    port <- databaseConfig["port"]
+                    user <- databaseConfig["user"]
+                    pwd  <- databaseConfig["pwd"]
+                    db   <- databaseConfig["db"]
+                    type <- databaseConfig["type"]
+                    
+                    switch (type,
+                            mysql   = {
+                                databaseConnection <<- DBI::dbConnect(MySQL(),
+                                                                      user     = user,
+                                                                      password = pwd,
+                                                                      dbname   = db,
+                                                                      host     = host,
+                                                                      post     = port)
+                            },
+                            
+                            sqlite  = {
+                                databaseConnection <<- DBI::dbConnect(SQLite(),
+                                                                      host     = host)
+                            },
+                            
+                            pgsql   = {
+                                databaseConnection <<- DBI::dbConnect(PostgreSQL(),
+                                                                      user     = user,
+                                                                      password = pwd,
+                                                                      dbname   = db,
+                                                                      host     = host,
+                                                                      post     = port)
+                            }
+                    )
+                }
             }, error = function (ex) {
                 stop (ex$message)
             })
