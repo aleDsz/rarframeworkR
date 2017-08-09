@@ -5,6 +5,7 @@
 #'
 #' @aliases DataContext
 #' @importFrom methods setRefClass
+#' @importFrom jsonlite fromJSON
 #' @import DBI
 #' @exportClass DataContext
 #'
