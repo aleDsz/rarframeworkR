@@ -50,7 +50,9 @@ ObjectContext <- setRefClass(
                     objeto <- new(getTableName())
 
                     for (prop in listProps) {
-                        attr(object, prop$fieldName) <<- dataReader[1, prop$fieldName]
+                        fieldName <- prop$fieldName
+                        
+                        objeto$fieldName <- dataReader[1, prop$fieldName]
                     }
                 }
 
@@ -72,7 +74,9 @@ ObjectContext <- setRefClass(
                         objeto <- new(getTableName())
                         
                         for (prop in listProps) {
-                            attr(objeto, prop$fieldName) <- dataReader[i, prop$fieldName]
+                            fieldName <- prop$fieldName
+                            
+                            objeto$fieldName <- dataReader[i, prop$fieldName]
                         }
 
                         listObjects[i] <- objeto
@@ -95,9 +99,9 @@ ObjectContext <- setRefClass(
 
                     property$setValues(
                         propertyName,
-                        class(attr(object, propertyName)),
-                        ifelse(propertyName == "id", TRUE, FALSE),
-                        attr(object, propertyName)
+                        class(object$propertyName),
+                        ifelse(grepl("id^", propertyName), TRUE, FALSE),
+                        object$propertyName
                     )
                 }
 
@@ -120,8 +124,8 @@ ObjectContext <- setRefClass(
                 fieldNames <- as.list(names(dataFrame))
                 object ->> object
 
-                for (i in { 1 : length(fieldNames) }) {
-                    attr(object, fieldNames[i]) <<- dataFrame[1, fieldNames[i]]
+                for (fieldName in fieldNames) {
+                    object$fieldName <<- dataFrame[1, fieldName]
                 }
 
                 return (object)

@@ -17,6 +17,8 @@ DatabaseFactory <- setRefClass(
 
         getDataContextInstance = function() {
             tryCatch({
+                dataContextInstance ->> dataContextInstance
+                
                 if (is.null(dataContextInstance)) {
                     dataContextInstance <<- DataContext$new()
                 }

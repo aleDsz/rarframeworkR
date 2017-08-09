@@ -30,7 +30,10 @@ DataContextFactory <- setRefClass(
 
         getConnection = function() {
             tryCatch({
-                loadConfig()
+                databaseConfig ->> databaseConfig
+                
+                if (length(databaseConfig) == 0)
+                    loadConfig()
 
                 if (is.null(databaseConfig))
                     stop("Arquivo de configuração não encontrado: databaseConfig.json")
