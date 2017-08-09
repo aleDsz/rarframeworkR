@@ -89,8 +89,8 @@ DataContext <- setRefClass(
                 }
 
                 rs        <- dbSendQuery(databaseConnection, sSql)
+                rowCount  <- dbGetRowCount(rs)
                 fetchData <- dbFetch(rs)
-                rowCount  <- dbGetRowCount(fetchData)
                 dbClearResult(rs)
 
                 return (fetchData)

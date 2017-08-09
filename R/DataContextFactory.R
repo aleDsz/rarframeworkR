@@ -31,7 +31,8 @@ DataContextFactory <- setRefClass(
 
         getConnection = function() {
             tryCatch({
-                databaseConfig ->> databaseConfig
+                databaseConfig    ->> databaseConfig
+                databaseConnection <- NULL
                 
                 if (length(databaseConfig) == 0)
                     loadConfig()
@@ -39,31 +40,39 @@ DataContextFactory <- setRefClass(
                 if (is.null(databaseConfig))
                     stop("Arquivo de configuração não encontrado: databaseConfig.json")
 
-                host = databaseConfig["host"];
-                port = databaseConfig["port"];
-                user = databaseConfig["user"];
-                pwd  = databaseConfig["pwd"];
-                db   = databaseConfig["db"];
-                type = databaseConfig["type"];
+                host <- databaseConfig["host"];
+                port <- databaseConfig["port"];
+                user <- databaseConfig["user"];
+                pwd  <- databaseConfig["pwd"];
+                db   <- databaseConfig["db"];
+                type <- databaseConfig["type"];
 
                 switch (type,
-                    mysql   = return (DBI::dbConnect(MySQL(),
-                                                     user     = user,
-                                                     password = pwd,
-                                                     dbname   = db,
-                                                     host     = host,
-                                                     post     = port)),
+                    mysql   = {
+                        databaseConnection <- DBI::dbConnect(MySQL(),
+                                                             user     = user,
+                                                             password = pwd,
+                                                             dbname   = db,
+                                                             host     = host,
+                                                             post     = port)
+                    },
                     
-                    sqlite  = return (DBI::dbConnect(SQLite(),
-                                                     host     = host)),
+                    sqlite  = {
+                        databaseConnection <- DBI::dbConnect(SQLite(),
+                                                             host     = host)
+                    },
                     
-                    pgsql   = return (DBI::dbConnect(PostgreSQL(),
-                                                     user     = user,
-                                                     password = pwd,
-                                                     dbname   = db,
-                                                     host     = host,
-                                                     post     = port))
+                    pgsql   = {
+                        databaseConnection <- DBI::dbConnect(PostgreSQL(),
+                                                             user     = user,
+                                                             password = pwd,
+                                                             dbname   = db,
+                                                             host     = host,
+                                                             post     = port)
+                    }
                 )
+                
+                return (databaseConnection)
             }, error = function (ex) {
                 stop (ex$message)
             })
