@@ -25,14 +25,14 @@ SqlStatementInsert <- setRefClass(
         
         createSql = function(isList) {
             tryCatch({
-                objectContext      <- ObjectContext$new(object);
-                listProps          <- objectContext$getProperties();
+                objectContext      <- ObjectContext$new(object)
+                listProps          <- objectContext$getProperties()
                 insertQueryBuilder <- InsertQueryBuilder$new()
                 insertQueryBuilder$addFrom(objectContext$getTableName())
                 
                 for (prop in listProps) {
-                    insertQueryBuilder$addField(prop$fieldName);
-                    insertQueryBuilder$addValue(prop$value);
+                    insertQueryBuilder$addField(prop$fieldName)
+                    insertQueryBuilder$addValue(prop$value)
                 }
                 
                 sSql <<- insertQueryBuilder$toString()

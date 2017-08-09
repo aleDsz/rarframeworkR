@@ -20,37 +20,40 @@ SqlStatement <- setRefClass(
                         numeric = ,
                         integer = {
                             if (is.array(propValue) | is.list(propValue)) {
-                                sqlValue <- c("IN (")
+                                sqlValue <- paste0("IN (")
                                 
                                 for (prop in propValue) {
                                     sqlValue <- c(sqlValue, prop, comma)
                                 }
                                 
                                 sqlValue <- substring(sqlValue, 1, nchar(sqlValue) - nchar(comma))
-                                sqlValue <- c(sqlValue, ")")
+                                sqlValue <- paste0(sqlValue, ")")
                             } else {
-                                sqlValue <- propValue
+                                sqlValue <- paste0("= ", propValue)
                             }
                         },
                         
-                        character = ,
-                        Date      = {
+                        character = {
                             if (startsWith(propValue, "%") | endsWith(propValue, "%")) {
-                                sqlValue <- c("LIKE ", trimws(shQuote(sqlValue)))
+                                sqlValue <- paste0("LIKE ", trimws(shQuote(sqlValue)))
                             } else {
                                 if (is.array(propValue) | is.list(propValue)) {
-                                    sqlValue <- c("IN (")
+                                    sqlValue <- paste0("IN (")
                                     
                                     for (prop in propValue) {
-                                        sqlValue <- c(sqlValue, trimws(shQuote(prop)), comma)
+                                        sqlValue <- paste0(sqlValue, trimws(shQuote(prop)), comma)
                                     }
                                     
                                     sqlValue <- substring(sqlValue, 1, nchar(sqlValue) - nchar(comma))
-                                    sqlValue <- c(sqlValue, ")")
+                                    sqlValue <- paste0(sqlValue, ")")
                                 } else {
-                                    sqlValue <- trimws(shQuote(sqlValue))
+                                    sqlValue <- paste0("= ", trimws(shQuote(propValue)))
                                 }
                             }
+                        },
+                        
+                        Date = {
+                            sqlValue <- paste0("BETWEEN ", trimws(shQuote(propValue[1])), " AND ", trimws(shQuote(propValue[2])))
                         }
                     )
                 }

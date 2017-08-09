@@ -25,8 +25,8 @@ SqlStatementUpdate <- setRefClass(
         
         createSql = function(isList) {
             tryCatch({
-                objectContext      <- ObjectContext$new(object);
-                listProps          <- objectContext$getProperties();
+                objectContext      <- ObjectContext$new(object)
+                listProps          <- objectContext$getProperties()
                 listPks            <- list();
                 listNonPks         <- list();
                 updateQueryBuilder <- UpdateQueryBuilder$new()
@@ -46,12 +46,12 @@ SqlStatementUpdate <- setRefClass(
                     stop ("Informar pelo menos 1 Primary Key")
                 
                 for (prop in listNonPks) {
-                    updateQueryBuilder$addField(prop$fieldName);
-                    updateQueryBuilder$addValue(prop$value);
+                    updateQueryBuilder$addField(prop$fieldName)
+                    updateQueryBuilder$addValue(prop$value)
                 }
                 
                 for (prop in listPks) {
-                    updateQueryBuilder$addWhere(c(prop$fieldName, " ", getQuotedValue(prop$value, prop$type)));
+                    updateQueryBuilder$addWhere(paste0(prop$fieldName, " ", getQuotedValue(prop$value, prop$type)))
                 }
                 
                 sSql <<- updateQueryBuilder$toString()

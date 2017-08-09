@@ -25,8 +25,8 @@ SqlStatementSelect <- setRefClass(
         
         createSql = function(isList) {
             tryCatch({
-                objectContext <- ObjectContext$new(object);
-                listProps     <- objectContext$getProperties();
+                objectContext <- ObjectContext$new(object)
+                listProps     <- objectContext$getProperties()
                 
                 if (!isList) {
                     countPks <- 0
@@ -47,12 +47,11 @@ SqlStatementSelect <- setRefClass(
                 selectQueryBuilder$addFrom(objectContext$getTableName())
                 
                 for (prop in listProps) {
-                    selectQueryBuilder$addField(prop$fieldName);
-                    
-                    cat("[", as.character(Sys.Date()), "] [rarframeworkR:::SqlStatementSelect$createSql] [TRACE] - Creating SelectQueryBuilder | ", prop$fieldName,": '", prop$value,"'")
+                    selectQueryBuilder$addField(prop$fieldName)
                     
                     if (length(prop$value) > 0) {
-                        selectQueryBuilder$addWhere(c(prop$fieldName, " ", getQuotedValue(prop$value, prop$type)));
+                        
+                        selectQueryBuilder$addWhere(paste0(prop$fieldName, " ", getQuotedValue(prop$value, prop$type)))
                     }
                 }
                 
