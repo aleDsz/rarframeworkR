@@ -60,6 +60,9 @@ ObjectContext <- setRefClass(
 
         getObjects = function(dataReader = data.frame()) {
             tryCatch({
+                # TEMP FIX
+                return (dataReader)
+                
                 objeto      <- NULL
                 object     ->> object
                 listProps   <- getProperties()
