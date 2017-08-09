@@ -13,11 +13,11 @@ UpdateQueryBuilder <- setRefClass(
         
         toString = function() {
             tryCatch({
-                sSql <- c("UPDATE ", getFromClause(), "\r\n")
-                sSql <- c("   SET ", getSetClause(),  "\r\n")
+                sSql <- paste0("UPDATE ", getFromClause())
+                sSql <- paste0("   SET ", getSetClause())
                 
                 if (length(whereList) > 0) {
-                    sSql <- c(sSql, " WHERE ", getWhereClause())
+                    sSql <- paste0(sSql, " WHERE ", getWhereClause())
                 }
                 
                 return (gsub("\r\n", "", paste(sSql, collapse = " ")))

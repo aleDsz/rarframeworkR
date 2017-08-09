@@ -32,9 +32,9 @@ SqlStatementDelete <- setRefClass(
                 deleteQueryBuilder$addFrom(objectContext$getTableName())
                 
                 for (prop in listProps) {
-                    if (!is.null(prop$value)) {
+                    if (length(prop$value) > 0) {
                         if (prop$primaryKey) {
-                            listPks[length(listPks) + 1] <- prop
+                            listPks <- c(listPks, prop)
                         }
                     }
                 }

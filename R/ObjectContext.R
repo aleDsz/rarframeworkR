@@ -29,12 +29,12 @@ ObjectContext <- setRefClass(
                 properties <- as.list(names((object$getClass())@fieldClasses))
 
                 if (length(properties) > 0) {
-                    for (i in { 1 : length(properties) }) {
-                        listProps[i] <- getCustomAttributes(unlist(properties[i]))
+                    for (prop in properties) {
+                        listProps <- c(listProps, getCustomAttributes(prop))
                     }
                 }
 
-                return (listProps)
+                return (as.list(listProps))
             }, error = function(ex) {
                 stop (ex$message)
             })

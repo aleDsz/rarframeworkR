@@ -33,12 +33,12 @@ SqlStatementUpdate <- setRefClass(
                 updateQueryBuilder$addFrom(objectContext$getTableName())
                 
                 for (prop in listProps) {
-                    if (!is.null(prop$value)) {
-                        if (prop$primaryKey) {
-                            listPks[length(listPks) + 1]       <- prop
-                        } else {
-                            listNonPks[length(listNonPks) + 1] <- prop
+                    if (prop$primaryKey) {
+                        if (length(prop$value) > 0) {
+                            listPks <- c(listPks, prop)
                         }
+                    } else {
+                        listNonPks  <- c(listNonPks, prop)
                     }
                 }
                 

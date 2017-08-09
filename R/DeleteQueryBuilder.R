@@ -13,11 +13,11 @@ DeleteQueryBuilder <- setRefClass(
         
         toString = function() {
             tryCatch({
-                sSql <- "DELETE \r\n"
-                sSql <- c(sSql, "  FROM ", getFromClause(), "\r\n")
+                sSql <- "DELETE"
+                sSql <- paste0(sSql, "  FROM ", getFromClause())
                 
                 if (length(whereList) > 0) {
-                    sSql <- c(sSql, " WHERE ", getWhereClause())
+                    sSql <- paste0(sSql, " WHERE ", getWhereClause())
                 }
                 
                 return (paste(sSql, collapse = " "))

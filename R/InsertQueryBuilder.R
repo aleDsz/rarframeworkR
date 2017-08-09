@@ -13,12 +13,7 @@ InsertQueryBuilder <- setRefClass(
         
         toString = function() {
             tryCatch({
-                sSql <- character(0)
-                
-                sSql <- c("INSERT INTO ", getFromClause(), " ")
-                sSql <- c(sSql, "(", getFieldClause(), ")")
-                sSql <- c(sSql, " VALUES ")
-                sSql <- c(sSql, "(", getValueClause(), ")")
+                sSql <- paste0("INSERT INTO ", getFromClause(), " (", getFieldClause(), ") VALUES (", getValueClause(), ")")
                 
                 return (gsub("\r\n", "", paste(sSql, collapse = " ")))
             }, error = function(ex) {

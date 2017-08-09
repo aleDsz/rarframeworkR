@@ -32,7 +32,7 @@ SqlStatementSelect <- setRefClass(
                     countPks <- 0
                     
                     for (prop in listProps) {
-                        if (!is.null(prop$value)) {
+                        if (length(prop$value) > 0) {
                             if (prop$primaryKey) {
                                 countPks <- countPks + 1
                             }
