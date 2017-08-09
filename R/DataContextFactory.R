@@ -46,8 +46,6 @@ DataContextFactory <- setRefClass(
                 pwd  <- databaseConfig[["pwd"]]
                 db   <- databaseConfig[["db"]]
                 type <- databaseConfig[["type"]]
-
-                cat("Conectando ao host: ", host, " do banco de dados: ", type)
                 
                 switch (type,
                     mysql   = {
