@@ -43,20 +43,16 @@ ObjectContext <- setRefClass(
         getObject = function(dataReader = data.frame()) {
             tryCatch({
                 object    ->> object
-                objeto     <- NULL
                 listProps  <- getProperties()
 
                 if (!is.null(dataReader) & nrow(dataReader) > 0) {
-                    objeto <- new(getTableName())
-
                     for (prop in listProps) {
-                        fieldName <- prop$fieldName
-                        
-                        objeto$fieldName <- dataReader[1, prop$fieldName]
+                        fieldName            <- prop$fieldName
+                        object[[fieldName]] <<- dataReader[1, prop$fieldName]
                     }
                 }
 
-                return (objeto)
+                return (object)
             }, error = function(ex) {
                 stop (ex$message)
             })
@@ -74,9 +70,8 @@ ObjectContext <- setRefClass(
                         objeto <- new(getTableName())
                         
                         for (prop in listProps) {
-                            fieldName <- prop$fieldName
-                            
-                            objeto$fieldName <- dataReader[i, prop$fieldName]
+                            fieldName           <- prop$fieldName
+                            objeto[[fieldName]] <- dataReader[i, prop$fieldName]
                         }
 
                         listObjects[i] <- objeto
@@ -99,9 +94,9 @@ ObjectContext <- setRefClass(
 
                     property$setValues(
                         propertyName,
-                        class(object$propertyName),
+                        class(object[[propertyName]]),
                         ifelse(grepl("id^", propertyName), TRUE, FALSE),
-                        object$propertyName
+                        object[[propertyName]]
                     )
                 }
 
@@ -122,10 +117,10 @@ ObjectContext <- setRefClass(
         fillObject = function(dataFrame = data.frame()) {
             tryCatch({
                 fieldNames <- as.list(names(dataFrame))
-                object ->> object
+                object    ->> object
 
                 for (fieldName in fieldNames) {
-                    object$fieldName <<- dataFrame[1, fieldName]
+                    object[[fieldName]] <<- dataFrame[1, fieldName]
                 }
 
                 return (object)
