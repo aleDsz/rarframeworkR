@@ -7,17 +7,18 @@
 #' @importFrom methods setRefClass
 #' @importFrom jsonlite fromJSON
 #' @import DBI
+#' @import RMySQL
 #' @exportClass DataContext
 #'
 DataContext <- setRefClass(
     "DataContext",
-
+    
     fields = list(
-
-        databaseConnection = "ANY"
-
+        
+        databaseConnection = "MySQLConnection"
+        
     ),
-
+    
     methods = list(
 
         initialize = function() {
@@ -35,38 +36,36 @@ DataContext <- setRefClass(
                 if (file.exists(paste0(getwd(), "/databaseConfig.json")))
                     databaseConfig <- fromJSON(paste0(getwd(), "/databaseConfig.json"))
                 
-                databaseConnection ->> databaseConnection
-                
                 if (is.list(databaseConfig)) {
-                    host <- databaseConfig["host"]
-                    port <- databaseConfig["port"]
-                    user <- databaseConfig["user"]
-                    pwd  <- databaseConfig["pwd"]
-                    db   <- databaseConfig["db"]
-                    type <- databaseConfig["type"]
+                    host <- unlist(databaseConfig[["host"]])
+                    port <- unlist(databaseConfig[["port"]])
+                    user <- unlist(databaseConfig[["user"]])
+                    pwd  <- unlist(databaseConfig[["pwd"]])
+                    db   <- unlist(databaseConfig[["db"]])
+                    type <- unlist(databaseConfig[["type"]])
                     
                     switch (type,
                             mysql   = {
-                                databaseConnection <<- DBI::dbConnect(MySQL(),
-                                                                      user     = user,
-                                                                      password = pwd,
-                                                                      dbname   = db,
-                                                                      host     = host,
-                                                                      post     = port)
+                                databaseConnection <<- dbConnect(MySQL(),
+                                                                 user     = user,
+                                                                 password = pwd,
+                                                                 dbname   = db,
+                                                                 host     = host,
+                                                                 post     = port)
                             },
                             
                             sqlite  = {
-                                databaseConnection <<- DBI::dbConnect(SQLite(),
-                                                                      host     = host)
+                                databaseConnection <<- dbConnect(SQLite(),
+                                                                 host     = host)
                             },
                             
                             pgsql   = {
-                                databaseConnection <<- DBI::dbConnect(PostgreSQL(),
-                                                                      user     = user,
-                                                                      password = pwd,
-                                                                      dbname   = db,
-                                                                      host     = host,
-                                                                      post     = port)
+                                databaseConnection <<- dbConnect(PostgreSQL(),
+                                                                 user     = user,
+                                                                 password = pwd,
+                                                                 dbname   = db,
+                                                                 host     = host,
+                                                                 post     = port)
                             }
                     )
                 }
