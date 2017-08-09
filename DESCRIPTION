@@ -1,10 +1,10 @@
 Package: rarframeworkR
 Type: Package
 Title: ORM in R
-Version: 1.0.17
+Version: 1.0.21
 Author: Alexandre de Souza <alexandre@aledsz.com.br>
 Maintainer: Alexandre de Souza <alexandre@aledsz.com.br>
-Description: RAR Framework in R
+Description: ORM RAR Framework adaptado para a linguagem R com intuito de agilizar o processo de conexão com o banco de dados
 License: MIT
 Encoding: UTF-8
 LazyData: true

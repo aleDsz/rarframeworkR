@@ -17,13 +17,11 @@ DatabaseFactory <- setRefClass(
         
         getDataContextInstance = function() {
             tryCatch({
-                dataContextInstance ->> dataContextInstance
-                
-                if (is.null(dataContextInstance)) {
-                    dataContextInstance <<- DataContext$new()
+                if (is.null(.self$dataContextInstance)) {
+                    .self$dataContextInstance <- DataContext$new()
                 }
                 
-                return (dataContextInstance)
+                return (.self$dataContextInstance)
             }, error = function(ex) {
                 stop (ex$message)
             })

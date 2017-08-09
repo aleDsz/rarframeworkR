@@ -16,17 +16,17 @@ SelectQueryBuilder <- setRefClass(
                 sSql <- character(0)
                 
                 if (length(fieldList) > 0) {
-                    sSql <- paste0("SELECT ", trimws(getFieldClause()), "\r\n")
+                    sSql <- paste0("SELECT ", trimws(getFieldClause()))
                 } else {
                     sSql <- "SELECT *\r\n"
                 }
                 
                 if (length(fromList) > 0) {
-                    sSql <- paste0(sSql, " FROM ", trimws(getFromClause()), "\r\n")
+                    sSql <- paste0(sSql, "  FROM ", trimws(getFromClause()))
                 }
                 
                 if (length(whereList) > 0) {
-                    sSql <- paste0(sSql, "WHERE ", trimws(getWhereClause()))
+                    sSql <- paste0(sSql, " WHERE ", trimws(getWhereClause()))
                 }
                 
                 return (gsub("\r\n", "", paste(sSql, collapse = " ")))

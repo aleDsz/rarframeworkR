@@ -87,7 +87,7 @@ DefaultQueryBuilder <- setRefClass(
         getSetClause = function() {
             tryCatch({
                 sSql       <- character(0)
-                comma      <- ",\r\n       "
+                comma      <- ", "
                 valueList ->> valueList
                 fieldList ->> fieldList
                 sSql       <- paste(fieldList, " = ", valueList, collapse = comma)
@@ -124,7 +124,7 @@ DefaultQueryBuilder <- setRefClass(
         
         getWhereClause = function() {
             tryCatch({
-                andSql     <- "\r\n   AND "
+                andSql     <- " AND "
                 whereList ->> whereList
                 sSql       <- paste(whereList, collapse = andSql)
                 
