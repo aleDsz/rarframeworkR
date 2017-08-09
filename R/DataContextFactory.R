@@ -22,7 +22,8 @@ DataContextFactory <- setRefClass(
 
         loadConfig = function() {
             tryCatch({
-                databaseConfig <<- fromJSON("databaseConfig.json")
+                if (file.exists(paste0(getwd(), "/databaseConfig.json")))
+                    databaseConfig <<- fromJSON(paste0(getwd(), "/databaseConfig.json"))
             }, error = function (ex) {
                 stop (ex$message)
             })

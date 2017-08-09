@@ -9,7 +9,7 @@ DatabaseFactory <- setRefClass(
 
     fields = list(
 
-        dataContextInstance = "ANY"
+        dataContextInstance = "DataContext"
 
     ),
 
