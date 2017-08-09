@@ -133,10 +133,8 @@ DataContext <- setRefClass(
                     connect()
                 }
 
-                rs        <- dbSendQuery(databaseConnection, sSql)
+                rs        <- dbGetQuery(databaseConnection, sSql)
                 rowCount  <- dbGetRowCount(rs)
-                fetchData <- dbFetch(rs)
-                dbClearResult(rs)
                 
                 cat("[", as.character(Sys.Date()), "] [rarframeworkR:::DataContext$executeReader] [TRACE] - ", rowCount," registro(s) encontrado(s)")
 
@@ -156,8 +154,6 @@ DataContext <- setRefClass(
                 rowCount <- dbGetRowsAffected(rs)
                 
                 cat("[", as.character(Sys.Date()), "] [rarframeworkR:::DataContext$executeQuery] [TRACE] - ", rowCount," registro(s) afetado(s)")
-
-                dbClearResult(rs)
             }, error = function (ex) {
                 stop (ex$message)
             })

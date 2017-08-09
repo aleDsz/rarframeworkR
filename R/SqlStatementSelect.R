@@ -49,6 +49,8 @@ SqlStatementSelect <- setRefClass(
                 for (prop in listProps) {
                     selectQueryBuilder$addField(prop$fieldName);
                     
+                    cat("[", as.character(Sys.Date()), "] [rarframeworkR:::SqlStatementSelect$createSql] [TRACE] - Creating SelectQueryBuilder | ", prop$fieldName,": '", prop$value,"'")
+                    
                     if (length(prop$value) > 0) {
                         selectQueryBuilder$addWhere(c(prop$fieldName, " ", getQuotedValue(prop$value, prop$type)));
                     }

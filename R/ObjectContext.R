@@ -98,7 +98,7 @@ ObjectContext <- setRefClass(
                     property$setValues(
                         propertyName,
                         class(object[[propertyName]]),
-                        ifelse(grepl("id^", propertyName), TRUE, FALSE),
+                        ifelse(grepl("id$", propertyName), TRUE, FALSE),
                         object[[propertyName]]
                     )
                 }
