@@ -19,14 +19,13 @@ ObjectContext <- setRefClass(
     methods = list(
 
         initialize = function(Object = NULL) {
-            object <<- Object
+            .self$object <- Object
         },
 
         getProperties = function() {
             tryCatch({
-                object    ->> object
                 listProps  <- list()
-                properties <- as.list(names((object$getClass())@fieldClasses))
+                properties <- as.list(names((.self$object$getClass())@fieldClasses))
 
                 if (length(properties) > 0) {
                     for (prop in properties) {
@@ -42,13 +41,11 @@ ObjectContext <- setRefClass(
 
         getObject = function(dataReader = data.frame()) {
             tryCatch({
-                object    ->> object
-                listProps  <- getProperties()
+                listProps <- getProperties()
 
                 if (!is.null(dataReader) & nrow(dataReader) > 0) {
                     for (prop in listProps) {
-                        fieldName            <- prop$fieldName
-                        object[[fieldName]] <<- dataReader[1, prop$fieldName]
+                        .self$object[[prop$fieldName]] <- dataReader[1, prop$fieldName]
                     }
                 }
 
@@ -64,7 +61,6 @@ ObjectContext <- setRefClass(
                 return (dataReader)
                 
                 objeto      <- NULL
-                object     ->> object
                 listProps   <- getProperties()
                 listObjects <- list()
 
@@ -77,7 +73,7 @@ ObjectContext <- setRefClass(
                             objeto[[fieldName]] <- dataReader[i, prop$fieldName]
                         }
 
-                        listObjects[i] <- objeto
+                        listObjects <- c(listObjects, objeto)
                     }
                 }
 
@@ -90,16 +86,15 @@ ObjectContext <- setRefClass(
         getCustomAttributes = function(propertyName) {
             tryCatch({
                 property <- NULL
-                object  ->> object
 
                 if (nchar(propertyName) > 0) {
                     property <- Property$new()
 
                     property$setValues(
                         propertyName,
-                        class(object[[propertyName]]),
+                        class(.self$object[[propertyName]]),
                         ifelse(grepl("id$", propertyName), TRUE, FALSE),
-                        object[[propertyName]]
+                        .self$object[[propertyName]]
                     )
                 }
 
@@ -111,7 +106,7 @@ ObjectContext <- setRefClass(
 
         getTableName = function() {
             tryCatch({
-                return (unlist(as.list((object$getClass())@className)[1]))
+                return (unlist(as.list((.self$object$getClass())@className)[1]))
             }, error = function(ex) {
                 stop (ex$message)
             })
@@ -119,14 +114,39 @@ ObjectContext <- setRefClass(
 
         fillObject = function(dataFrame = data.frame()) {
             tryCatch({
+                listProps  <- getProperties()
                 fieldNames <- as.list(names(dataFrame))
-                object    ->> object
-
-                for (fieldName in fieldNames) {
-                    object[[fieldName]] <<- dataFrame[1, fieldName]
+                
+                for (i in { 1 : length(fieldNames) }) {
+                    fieldName <- fieldNames[[i]]
+                    prop      <- listProps[sapply(listProps, function(x) x$fieldName == fieldName)][[1]]
+                    
+                    if (length(prop) > 0) {
+                        switch(prop$type,
+                               numeric = {
+                                   .self$object[[fieldName]] <- ifelse(is.na(dataFrame[1, fieldName]), NA, as.numeric(dataFrame[1, fieldName]))
+                               },
+                               
+                               integer = {
+                                   .self$object[[fieldName]] <- ifelse(is.na(dataFrame[1, fieldName]), NA, as.integer(dataFrame[1, fieldName]))
+                               },
+                               
+                               character = {
+                                   .self$object[[fieldName]] <- ifelse(is.na(dataFrame[1, fieldName]), NA, as.character(dataFrame[1, fieldName]))
+                               },
+                               
+                               Date = {
+                                   .self$object[[fieldName]] <- ifelse(is.na(dataFrame[1, fieldName]), NA, as.Date(dataFrame[1, fieldName]))
+                               },
+                               
+                               POSIXct = {
+                                   .self$object[[fieldName]] <- ifelse(is.na(dataFrame[1, fieldName]), NA, as.POSIXct(dataFrame[1, fieldName]))
+                               }
+                        )
+                    }
                 }
 
-                return (object)
+                return (.self$object)
             }, error = function(ex) {
                 stop (ex$message)
             })

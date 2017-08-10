@@ -23,10 +23,6 @@ DataContext <- setRefClass(
 
         initialize = function() {
             tryCatch({
-                
-                if (length(dbListConnections(MySQL())) > 0)
-                    .self$databaseConnection <- dbListConnections(MySQL())[1]
-                
                 if (is.null(databaseConnection))
                     createConnection()
             }, error = function (ex) {
@@ -81,11 +77,7 @@ DataContext <- setRefClass(
 
         connect = function() {
             tryCatch({
-                if (length(dbListConnections(MySQL())) > 0)
-                    .self$databaseConnection <- dbListConnections(MySQL())[1]
-                
-                if (is.null(databaseConnection))
-                    createConnection()
+                createConnection()
             }, error = function (ex) {
                 stop (ex$message)
             })
@@ -93,11 +85,7 @@ DataContext <- setRefClass(
 
         disconnect = function() {
             tryCatch({
-                if (length(dbListConnections(MySQL())) > 0)
-                    .self$databaseConnection <- dbListConnections(MySQL())[1]
-                
-                if (!is.null(databaseConnection))
-                    dbDisconnect(databaseConnection)
+                dbDisconnect(.self$databaseConnection)
             }, error = function (ex) {
                 stop (ex$message)
             })
@@ -105,9 +93,6 @@ DataContext <- setRefClass(
 
         beginTransaction = function() {
             tryCatch({
-                if (length(dbListConnections(MySQL())) > 0)
-                    .self$databaseConnection <- dbListConnections(MySQL())[1]
-                
                 if (is.null(databaseConnection)) {
                     connect()
                 }
@@ -120,9 +105,6 @@ DataContext <- setRefClass(
 
         commitTransaction = function() {
             tryCatch({
-                if (length(dbListConnections(MySQL())) > 0)
-                    databaseConnection <<- dbListConnections(MySQL())[1]
-                
                 if (is.null(databaseConnection)) {
                     stop ("Conexão não encontrada")
                 }
@@ -135,9 +117,6 @@ DataContext <- setRefClass(
 
         rollbackTransaction = function() {
             tryCatch({
-                if (length(dbListConnections(MySQL())) > 0)
-                    .self$databaseConnection <- dbListConnections(MySQL())[1]
-                
                 if (is.null(databaseConnection)) {
                     stop ("Conexão não encontrada")
                 }
@@ -150,17 +129,14 @@ DataContext <- setRefClass(
 
         executeReader = function(sSql) {
             tryCatch({
-                if (length(dbListConnections(MySQL())) > 0)
-                    .self$databaseConnection <- dbListConnections(MySQL())[1]
-                
-                if (is.null(databaseConnection)) {
-                    connect()
-                }
+                connect()
                 
                 print(paste0("[", as.character(Sys.Date(), format = "%d/%m/%Y"), "] [rarframeworkR:::DataContext$executeReader] [TRACE] - Executing SQL: ", sSql))
 
                 resultStatement <- dbGetQuery(databaseConnection, sSql)
                 rowCount        <- nrow(resultStatement)
+                
+                disconnect()
                 
                 print(paste0("[", as.character(Sys.Date(), format = "%d/%m/%Y"), "] [rarframeworkR:::DataContext$executeReader] [TRACE] - ", rowCount," registro(s) encontrado(s)"))
 
@@ -172,17 +148,14 @@ DataContext <- setRefClass(
 
         executeQuery = function(sSql) {
             tryCatch({
-                if (length(dbListConnections(MySQL())) > 0)
-                    .self$databaseConnection <- dbListConnections(MySQL())[1]
-                
-                if (is.null(databaseConnection)) {
-                    connect()
-                }
+                connect()
                 
                 print(paste0("[", as.character(Sys.Date(), format = "%d/%m/%Y"), "] [rarframeworkR:::DataContext$executeQuery] [TRACE] - Executing SQL: ", sSql))
 
                 resultStatement <- dbSendStatement(databaseConnection, sSql)
                 rowCount        <- dbGetRowsAffected(resultStatement)
+                
+                disconnect()
                 
                 print(paste0("[", as.character(Sys.Date(), format = "%d/%m/%Y"), "] [rarframeworkR:::DataContext$executeQuery] [TRACE] - ", rowCount," registro(s) afetado(s)"))
             }, error = function (ex) {
