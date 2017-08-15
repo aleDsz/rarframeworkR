@@ -12,7 +12,8 @@ DefaultQueryBuilder <- setRefClass(
         valueList = "character",
         fieldList = "character",
         fromList  = "character",
-        whereList = "character"
+        whereList = "character",
+        groupList = "character"
         
     ),
     
@@ -25,6 +26,7 @@ DefaultQueryBuilder <- setRefClass(
                 fieldList  <<- character(0)
                 fromList   <<- character(0)
                 whereList  <<- character(0)
+                groupList  <<- character(0)
                 
             }, error = function(ex) {
                 stop (ex$message)
@@ -45,6 +47,16 @@ DefaultQueryBuilder <- setRefClass(
             tryCatch({
                 
                 fieldList <<- c(fieldList, field)
+                
+            }, error = function(ex) {
+                stop (ex$message)
+            })
+        },
+        
+        addGroup = function(group) {
+            tryCatch({
+                
+                groupList <<- c(groupList, group)
                 
             }, error = function(ex) {
                 stop (ex$message)
@@ -103,6 +115,18 @@ DefaultQueryBuilder <- setRefClass(
                 comma      <- ", "
                 fieldList ->> fieldList
                 sSql       <- paste(fieldList, collapse = comma)
+                
+                return (sSql)
+            }, error = function(ex) {
+                stop (ex$message)
+            })
+        },
+        
+        getGroupByClause = function() {
+            tryCatch({
+                comma      <- ", "
+                groupList ->> groupList
+                sSql       <- paste(groupList, collapse = comma)
                 
                 return (sSql)
             }, error = function(ex) {

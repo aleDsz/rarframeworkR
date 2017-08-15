@@ -119,37 +119,37 @@ ObjectContext <- setRefClass(
                 
                 for (i in { 1 : length(fieldNames) }) {
                     fieldName <- fieldNames[[i]]
-                    prop      <- listProps[sapply(listProps, function(x) x$fieldName == fieldName)][[1]]
+                    prop      <- listProps[sapply(listProps, function(x) x$fieldName == fieldName)]
                     
                     if (length(prop) > 0) {
-                        switch(prop$type,
+                        switch(prop[[1]]$type,
                                numeric = {
                                    if (!is.na(dataFrame[1, fieldName])) {
-                                       .self$object[[fieldName]] <- as.numeric(dataFrame[1, fieldName])
+                                       .self$object[[fieldName]] <- as.numeric(dataFrame[[fieldName]])
                                    }
                                },
                                
                                integer = {
                                    if (!is.na(dataFrame[1, fieldName])) {
-                                       .self$object[[fieldName]] <- as.integer(dataFrame[1, fieldName])
+                                       .self$object[[fieldName]] <- as.integer(dataFrame[[fieldName]])
                                    }
                                },
                                
                                character = {
                                    if (!is.na(dataFrame[1, fieldName])) {
-                                       .self$object[[fieldName]] <- as.character(dataFrame[1, fieldName])
+                                       .self$object[[fieldName]] <- as.character(dataFrame[[fieldName]])
                                    }
                                },
                                
                                Date = {
                                    if (!is.na(dataFrame[1, fieldName])) {
-                                       .self$object[[fieldName]] <- as.Date(dataFrame[1, fieldName])
+                                       .self$object[[fieldName]] <- as.character(dataFrame[[fieldName]])
                                    }
                                },
                                
                                POSIXct = {
                                    if (!is.na(dataFrame[1, fieldName])) {
-                                       .self$object[[fieldName]] <- as.POSIXct(dataFrame[1, fieldName])
+                                       .self$object[[fieldName]] <- as.POSIXct(dataFrame[[fieldName]])
                                    }
                                }
                         )
