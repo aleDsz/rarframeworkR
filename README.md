@@ -1,10 +1,10 @@
-# RAR Framework in R [ ![Codeship Status for aleDsz/rarframework](https://app.codeship.com/projects/037cc270-65b2-0135-dc38-623163ca562f/status?branch=master)](https://app.codeship.com/projects/240763)
+# RAR Framework in R [ ![Codeship Status for aleDsz/rarframeworkR](https://app.codeship.com/projects/8e0ddf10-65b3-0135-2167-6e2b51196e77/status?branch=master)](https://app.codeship.com/projects/240767)
 
 ## 1. Introdução
 
-Quando eu tive de criar um site em PHP, percebi que eu demandava muito do meu tempo na construção do back-end, tendo de me preocupar com a conexão com o banco de dados e com o acesso às intruções SQL. Porém, se eu fizesse uma troca de banco de dados eu teria de mudar todo o meu site para que ele funcionasse neste novo banco de dados.
+Após ter criado o mesmo framework, originalmente em [PHP](https://github.com/aleDsz/rarframework), percebi que eu teria a mesma necessidade de um ORM em outras linguagens. Assim como eu precisei quando comecei a utilizar o R em ambiente profissional e, com a praticidade que eu tinha em PHP, resolvi adaptar para R.
 
-Pensando nisso, tive a ideia de criar um framework que me ajudasse toda vez que eu fosse desenvolver um site novo e que precisasse de acesso ao banco de dados.
+Mas, o projeto ainda não está 100 completo, devido ao R não ter um suporte total ao POO.
 
 
 ## 2. Como Funciona
