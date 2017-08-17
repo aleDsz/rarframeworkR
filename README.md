@@ -4,7 +4,7 @@
 
 Após ter criado o mesmo framework, originalmente em [PHP](https://github.com/aleDsz/rarframework), percebi que eu teria a mesma necessidade de um ORM em outras linguagens. Assim como eu precisei quando comecei a utilizar o R em ambiente profissional e, com a praticidade que eu tinha em PHP, resolvi adaptar para R.
 
-Mas, o projeto ainda não está 100 completo, devido ao R não ter um suporte total ao POO.
+Mas, o projeto ainda não está 100% completo, devido ao R não ter um suporte total ao POO.
 
 
 ## 2. Como Funciona
