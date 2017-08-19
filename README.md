@@ -61,7 +61,7 @@ ModelDataAccess <- methods::setRefClass(
         save = function(obj) {
             tryCatch({
                 sqlStatement   <- rarframeworkR:::SqlStatementUpdate$new(obj);
-                commandContext <- CrarframeworkR:::ommandContext$new(sqlStatement$getSql());
+                commandContext <- rarframeworkR:::CommandContext$new(sqlStatement$getSql());
                 
                 commandContext$executeQuery()
             }, error = function (ex) {
