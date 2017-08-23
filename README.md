@@ -110,6 +110,21 @@ ModelDataAccess <- methods::setRefClass(
 
 **OBS.:** Você não precisa criar a classe de forma genérica, você pode criar uma classe de acesso a dados para cada entidade que você criar no modelo citado acima.
 
+E para que o ORM consiga se conectar com o banco de dados, você precisa criar um arquivo de configuração com o nome: `databaseConfig.json` e ele deve seguir o modelo abaixo:
+
+```json
+{
+    "host" : "localhost",
+    "port" : 3306,
+    "user" : "root",
+    "pwd"  : "123",
+    "db"   : "foo",
+    "type" : "mysql"
+}
+```
+
+**OBS.:** Neste modelo, estamos informando um banco MySQL.
+
 ## 4. Como Contribuir
 
 Para contribuir, você pode realizar um **fork** do nosso repositório e nos enviar um Pull Request.
