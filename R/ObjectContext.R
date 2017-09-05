@@ -86,9 +86,9 @@ ObjectContext <- setRefClass(
 
         getTableName = function() {
             tryCatch({
-                className <- unlist(as.list((.self$object$getClass())@className)[1])
+                className <- unlist(as.list((object$getClass())@className)[1])
                 
-                if (grepl(".", className())) {
+                if (grepl(".", className)) {
                     return (as.list(strsplit(className, "[.]")[[1]])[[2]])
                 } else {
                     return (className)
@@ -102,7 +102,7 @@ ObjectContext <- setRefClass(
             tryCatch({
                 className <- unlist(as.list((.self$object$getClass())@className)[1])
                 
-                if (grepl(".", className())) {
+                if (grepl(".", className)) {
                     return (as.list(strsplit(className, "[.]")[[1]])[[1]])
                 } else {
                     return ("common")
