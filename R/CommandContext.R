@@ -9,18 +9,20 @@ CommandContext <- setRefClass(
 
     fields = list(
 
-        command     = "ANY",
-        dataContext = "ANY"
+        command      = "ANY",
+        databaseName = "character",
+        dataContext  = "ANY"
 
     ),
 
     methods = list(
 
-        initialize = function(sSql = character(1)) {
+        initialize = function(sSql = character(1), databaseName = "common") {
             tryCatch({
-                databaseFactory <- DatabaseFactory$new()
-                dataContext    <<- databaseFactory$getDataContextInstance()
-                command        <<- sSql
+                databaseFactory    <- DatabaseFactory$new()
+                .self$dataContext  <- databaseFactory$getDataContextInstance(databaseName)
+                .self$command      <- sSql
+                .self$databaseName <- databaseName
             }, error = function (ex) {
                 stop (ex$message)
             })
@@ -28,7 +30,7 @@ CommandContext <- setRefClass(
 
         setSql = function(sSql) {
             tryCatch({
-                command        <<- sSql
+                .self$command <- sSql
             }, error = function (ex) {
                 stop (ex$message)
             })

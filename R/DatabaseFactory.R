@@ -15,10 +15,10 @@ DatabaseFactory <- setRefClass(
     
     methods = list(
         
-        getDataContextInstance = function() {
+        getDataContextInstance = function(databaseName = "common") {
             tryCatch({
                 if (is.null(.self$dataContextInstance)) {
-                    .self$dataContextInstance <- DataContext$new()
+                    .self$dataContextInstance <- DataContext$new(databaseName)
                 }
                 
                 return (.self$dataContextInstance)

@@ -15,16 +15,19 @@ DataContext <- setRefClass(
     
     fields = list(
         
-        databaseConnection = "MySQLConnection"
+        databaseConnection = "MySQLConnection",
+        databaseName       = "character"
         
     ),
     
     methods = list(
 
-        initialize = function() {
+        initialize = function(databaseName = "common") {
             tryCatch({
+                .self$databaseName <- databaseName
+                
                 if (is.null(databaseConnection))
-                    createConnection()
+                    createConnection(databaseName)
             }, error = function (ex) {
                 stop (ex$message)
             })
@@ -38,12 +41,17 @@ DataContext <- setRefClass(
                     databaseConfig <- fromJSON(paste0(getwd(), "/databaseConfig.json"))
                 
                 if (is.list(databaseConfig)) {
-                    host <- unlist(databaseConfig[["host"]])
-                    port <- unlist(databaseConfig[["port"]])
-                    user <- unlist(databaseConfig[["user"]])
-                    pwd  <- unlist(databaseConfig[["pwd"]])
-                    db   <- unlist(databaseConfig[["db"]])
-                    type <- unlist(databaseConfig[["type"]])
+                    
+                    if (is.na(.self$databaseName)) {
+                        .self$databaseName <- "common"
+                    }
+                    
+                    host <- unlist(databaseConfig[[.self$databaseName]][["host"]])
+                    port <- unlist(databaseConfig[[.self$databaseName]][["port"]])
+                    user <- unlist(databaseConfig[[.self$databaseName]][["user"]])
+                    pwd  <- unlist(databaseConfig[[.self$databaseName]][["pwd"]])
+                    db   <- unlist(databaseConfig[[.self$databaseName]][["db"]])
+                    type <- unlist(databaseConfig[[.self$databaseName]][["type"]])
                     
                     switch (type,
                             mysql   = {
