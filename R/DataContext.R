@@ -8,8 +8,6 @@
 #' @importFrom jsonlite fromJSON
 #' @import DBI
 #' @import RMySQL
-#' @import RPostgreSQL
-#' @import RSQLite
 #' @exportClass DataContext
 #'
 DataContext <- setRefClass(
