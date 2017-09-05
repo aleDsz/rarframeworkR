@@ -8,6 +8,8 @@
 #' @importFrom jsonlite fromJSON
 #' @import DBI
 #' @import RMySQL
+#' @import RPostgreSQL
+#' @import RSQLite
 #' @exportClass DataContext
 #'
 DataContext <- setRefClass(
@@ -27,7 +29,7 @@ DataContext <- setRefClass(
                 .self$databaseName <- databaseName
                 
                 if (is.null(databaseConnection))
-                    createConnection(databaseName)
+                    createConnection()
             }, error = function (ex) {
                 stop (ex$message)
             })
@@ -64,8 +66,7 @@ DataContext <- setRefClass(
                             },
                             
                             sqlite  = {
-                                .self$databaseConnection <- dbConnect(SQLite(),
-                                                                      host     = host)
+                                .self$databaseConnection <- dbConnect(SQLite(), host = host)
                             },
                             
                             pgsql   = {

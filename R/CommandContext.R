@@ -10,7 +10,6 @@ CommandContext <- setRefClass(
     fields = list(
 
         command      = "ANY",
-        databaseName = "character",
         dataContext  = "ANY"
 
     ),
@@ -22,7 +21,6 @@ CommandContext <- setRefClass(
                 databaseFactory    <- DatabaseFactory$new()
                 .self$dataContext  <- databaseFactory$getDataContextInstance(databaseName)
                 .self$command      <- sSql
-                .self$databaseName <- databaseName
             }, error = function (ex) {
                 stop (ex$message)
             })

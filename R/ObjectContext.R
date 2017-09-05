@@ -105,7 +105,7 @@ ObjectContext <- setRefClass(
                 if (grepl(".", className())) {
                     return (as.list(strsplit(className, "[.]")[[1]])[[1]])
                 } else {
-                    return (NA)
+                    return ("common")
                 }
             }, error = function(ex) {
                 stop (ex$message)
