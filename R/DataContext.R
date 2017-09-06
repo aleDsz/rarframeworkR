@@ -22,7 +22,7 @@ DataContext <- setRefClass(
     
     methods = list(
 
-        initialize = function(databaseName = "common") {
+        initialize = function(databaseName) {
             tryCatch({
                 .self$databaseName <- databaseName
                 

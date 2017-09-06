@@ -18,8 +18,7 @@ CommandContext <- setRefClass(
 
         initialize = function(sSql = character(1), databaseName = "common") {
             tryCatch({
-                databaseFactory    <- DatabaseFactory$new()
-                .self$dataContext  <- databaseFactory$getDataContextInstance(databaseName)
+                .self$dataContext  <- DataContext$new(databaseName)
                 .self$command      <- sSql
             }, error = function (ex) {
                 stop (ex$message)
