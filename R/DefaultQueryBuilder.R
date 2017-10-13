@@ -88,7 +88,7 @@ DefaultQueryBuilder <- setRefClass(
                 sSql       <- character(0)
                 comma      <- ", "
                 valueList ->> valueList
-                sSql       <- paste(trimws(shQuote(valueList)), collapse = comma)
+                sSql       <- paste(trimws(shQuote(valueList, type = "sh")), collapse = comma)
                 
                 return (sSql)
             }, error = function(ex) {
