@@ -138,14 +138,14 @@ DataContext <- setRefClass(
             tryCatch({
                 connect()
                 
-                print(paste0("*[", format(Sys.time(), "%d/%m/%Y %X"), "] [rarframeworkR:::DataContext$executeReader] [TRACE] - Executing SQL: ", sSql))
+                print(paste0("[", format(Sys.time(), "%d/%m/%Y %X"), "] [rarframeworkR:::DataContext$executeReader] [TRACE] - Executing SQL: ", sSql))
 
                 resultStatement <- dbGetQuery(databaseConnection, sSql)
                 rowCount        <- nrow(resultStatement)
                 
                 disconnect()
                 
-                print(paste0("*[", format(Sys.time(), "%d/%m/%Y %X"), "] [rarframeworkR:::DataContext$executeQuery] [TRACE] - ", rowCount," row(s) affected(s)"))
+                print(paste0("[", format(Sys.time(), "%d/%m/%Y %X"), "] [rarframeworkR:::DataContext$executeQuery] [TRACE] - ", rowCount," row(s) affected(s)"))
 
                 return (resultStatement)
             }, error = function (ex) {
@@ -157,14 +157,14 @@ DataContext <- setRefClass(
             tryCatch({
                 connect()
                 
-                print(paste0("*[", format(Sys.time(), "%d/%m/%Y %X"), "] [rarframeworkR:::DataContext$executeQuery] [TRACE] - Executing SQL: ", sSql))
+                print(paste0("[", format(Sys.time(), "%d/%m/%Y %X"), "] [rarframeworkR:::DataContext$executeQuery] [TRACE] - Executing SQL: ", sSql))
 
                 resultStatement <- dbSendStatement(databaseConnection, sSql)
                 rowCount        <- dbGetRowsAffected(resultStatement)
                 
                 disconnect()
                 
-                print(paste0("*[", format(Sys.time(), "%d/%m/%Y %X"), "] [rarframeworkR:::DataContext$executeQuery] [TRACE] - ", rowCount," row(s) affected(s)"))
+                print(paste0("[", format(Sys.time(), "%d/%m/%Y %X"), "] [rarframeworkR:::DataContext$executeQuery] [TRACE] - ", rowCount," row(s) affected(s)"))
             }, error = function (ex) {
                 stop (ex$message)
             })
