@@ -47,9 +47,11 @@ ObjectContext <- setRefClass(
                     for (prop in listProps) {
                         .self$object[[prop$fieldName]] <- dataReader[1, prop$fieldName]
                     }
+                } else {
+                    return (NULL)
                 }
 
-                return (object)
+                return (.self$object)
             }, error = function(ex) {
                 stop (ex$message)
             })
