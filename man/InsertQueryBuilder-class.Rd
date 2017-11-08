@@ -2,8 +2,8 @@
 % Please edit documentation in R/InsertQueryBuilder.R
 \docType{class}
 \name{InsertQueryBuilder-class}
-\alias{InsertQueryBuilder-class}
 \alias{InsertQueryBuilder}
+\alias{InsertQueryBuilder-class}
 \title{Classe para manipulação de String SQL para a função INSERT}
 \description{
 Classe para manipulação de String SQL para a função INSERT

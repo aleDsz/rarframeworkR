@@ -4,9 +4,16 @@ Title: ORM in R
 Version: 1.2.5
 Author: Alexandre de Souza <alexandre@aledsz.com.br>
 Maintainer: Alexandre de Souza <alexandre@aledsz.com.br>
-Description: ORM RAR Framework adaptado para a linguagem R com intuito de agilizar o processo de conexão com o banco de dados
+Description: ORM RAR Framework adaptado para a linguagem R com intuito de
+    agilizar o processo de conexão com o banco de dados
 License: MIT
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.0.1
-Imports: DBI, RMySQL, RPostgreSQL, RSQLite, jsonlite, methods
+RoxygenNote: 5.0.1
+Imports:
+    DBI,
+    RMySQL,
+    RPostgreSQL,
+    RSQLite,
+    jsonlite,
+    methods

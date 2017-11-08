@@ -2,8 +2,8 @@
 % Please edit documentation in R/ObjectContext.R
 \docType{class}
 \name{ObjectContext-class}
-\alias{ObjectContext-class}
 \alias{ObjectContext}
+\alias{ObjectContext-class}
 \title{Classe para manipulação de objetos
 - Obter propriedades
 - Obter valores

@@ -27,18 +27,20 @@ SqlStatementUpdate <- setRefClass(
             tryCatch({
                 objectContext      <- ObjectContext$new(object)
                 listProps          <- objectContext$getProperties()
-                listPks            <- list();
-                listNonPks         <- list();
+                listPks            <- list()
+                listNonPks         <- list()
                 updateQueryBuilder <- UpdateQueryBuilder$new()
                 updateQueryBuilder$addFrom(objectContext$getTableName())
                 
                 for (prop in listProps) {
                     if (prop$primaryKey) {
-                        if (length(prop$value) > 0) {
+                        if (length(prop$value) > 0 & prop$fieldName == "id") {
                             listPks <- c(listPks, prop)
+                        } else {
+                            listNonPks <- c(listNonPks, prop)
                         }
                     } else {
-                        listNonPks  <- c(listNonPks, prop)
+                        listNonPks <- c(listNonPks, prop)
                     }
                 }
                 
