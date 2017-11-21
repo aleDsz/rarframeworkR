@@ -10,7 +10,7 @@ SqlStatement <- setRefClass(
 
     methods = list(
 
-        getQuotedValue = function(propValue, type ) {
+        getQuotedValue = function(propValue, type) {
             tryCatch({
                 sqlValue <- character(0)
                 comma    <- ", "
@@ -25,7 +25,7 @@ SqlStatement <- setRefClass(
                                
                                character = {
                                    if (startsWith(propValue, "%") | endsWith(propValue, "%")) {
-                                       sqlValue <- paste0("LIKE ", trimws(shQuote(sqlValue)))
+                                       sqlValue <- paste0("LIKE ", trimws(shQuote(propValue)))
                                    } else {
                                        sqlValue <- paste0("= ", trimws(shQuote(propValue)))
                                    }
