@@ -47,9 +47,11 @@ ObjectContext <- setRefClass(
                     for (prop in listProps) {
                         .self$object[[prop$fieldName]] <- dataReader[1, prop$fieldName]
                     }
+                } else {
+                    return (NULL)
                 }
 
-                return (object)
+                return (.self$object)
             }, error = function(ex) {
                 stop (ex$message)
             })
@@ -57,27 +59,7 @@ ObjectContext <- setRefClass(
 
         getObjects = function(dataReader = data.frame()) {
             tryCatch({
-                # TEMP FIX
                 return (dataReader)
-                
-                objeto      <- NULL
-                listProps   <- getProperties()
-                listObjects <- list()
-
-                if (!is.null(dataReader) & nrow(dataReader) > 0) {
-                    for (i in { 1 : nrow(dataReader) }) {
-                        objeto <- new(getTableName())
-                        
-                        for (prop in listProps) {
-                            fieldName           <- prop$fieldName
-                            objeto[[fieldName]] <- dataReader[i, prop$fieldName]
-                        }
-
-                        listObjects <- c(listObjects, objeto)
-                    }
-                }
-
-                return (listObjects)
             }, error = function(ex) {
                 stop (ex$message)
             })
@@ -106,7 +88,27 @@ ObjectContext <- setRefClass(
 
         getTableName = function() {
             tryCatch({
-                return (unlist(as.list((.self$object$getClass())@className)[1]))
+                className <- unlist(as.list((.self$object$getClass())@className)[1])
+                
+                if (grepl("[.]", className)) {
+                    return (as.list(strsplit(className, "[.]")[[1]])[[2]])
+                } else {
+                    return (className)
+                }
+            }, error = function(ex) {
+                stop (ex$message)
+            })
+        },
+        
+        getDatabaseName = function() {
+            tryCatch({
+                className <- unlist(as.list((.self$object$getClass())@className)[1])
+                
+                if (grepl("[.]", className)) {
+                    return (as.list(strsplit(className, "[.]")[[1]])[[1]])
+                } else {
+                    return ("common")
+                }
             }, error = function(ex) {
                 stop (ex$message)
             })

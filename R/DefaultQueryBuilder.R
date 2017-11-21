@@ -87,8 +87,7 @@ DefaultQueryBuilder <- setRefClass(
             tryCatch({
                 sSql       <- character(0)
                 comma      <- ", "
-                valueList ->> valueList
-                sSql       <- paste(trimws(shQuote(valueList)), collapse = comma)
+                sSql       <- paste(trimws(shQuote(.self$valueList, type = "sh")), collapse = comma, sep = "")
                 
                 return (sSql)
             }, error = function(ex) {
@@ -100,9 +99,7 @@ DefaultQueryBuilder <- setRefClass(
             tryCatch({
                 sSql       <- character(0)
                 comma      <- ", "
-                valueList ->> valueList
-                fieldList ->> fieldList
-                sSql       <- paste(fieldList, " = ", valueList, collapse = comma)
+                sSql       <- paste(.self$fieldList, " = ", trimws(paste0("'", .self$valueList, "'")), collapse = comma, sep = "")
                 
                 return (sSql)
             }, error = function(ex) {
@@ -113,8 +110,7 @@ DefaultQueryBuilder <- setRefClass(
         getFieldClause = function() {
             tryCatch({
                 comma      <- ", "
-                fieldList ->> fieldList
-                sSql       <- paste(fieldList, collapse = comma)
+                sSql       <- paste(.self$fieldList, collapse = comma, sep = "")
                 
                 return (sSql)
             }, error = function(ex) {
@@ -125,8 +121,7 @@ DefaultQueryBuilder <- setRefClass(
         getGroupByClause = function() {
             tryCatch({
                 comma      <- ", "
-                groupList ->> groupList
-                sSql       <- paste(groupList, collapse = comma)
+                sSql       <- paste(.self$groupList, collapse = comma, sep = "")
                 
                 return (sSql)
             }, error = function(ex) {
@@ -137,8 +132,7 @@ DefaultQueryBuilder <- setRefClass(
         getFromClause = function() {
             tryCatch({
                 comma     <- ", "
-                fromList ->> fromList
-                sSql      <- paste(fromList, collapse = comma)
+                sSql      <- paste(.self$fromList, collapse = comma, sep = "")
                 
                 return (sSql)
             }, error = function(ex) {
@@ -149,8 +143,7 @@ DefaultQueryBuilder <- setRefClass(
         getWhereClause = function() {
             tryCatch({
                 andSql     <- " AND "
-                whereList ->> whereList
-                sSql       <- paste(whereList, collapse = andSql)
+                sSql       <- paste(.self$whereList, collapse = andSql, sep = "")
                 
                 return (sSql)
             }, error = function(ex) {

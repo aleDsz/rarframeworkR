@@ -15,14 +15,17 @@ DataContext <- setRefClass(
     
     fields = list(
         
-        databaseConnection = "MySQLConnection"
+        databaseConnection = "MySQLConnection",
+        databaseName       = "character"
         
     ),
     
     methods = list(
 
-        initialize = function() {
+        initialize = function(databaseName) {
             tryCatch({
+                .self$databaseName <- databaseName
+                
                 if (is.null(databaseConnection))
                     createConnection()
             }, error = function (ex) {
@@ -38,12 +41,17 @@ DataContext <- setRefClass(
                     databaseConfig <- fromJSON(paste0(getwd(), "/databaseConfig.json"))
                 
                 if (is.list(databaseConfig)) {
-                    host <- unlist(databaseConfig[["host"]])
-                    port <- unlist(databaseConfig[["port"]])
-                    user <- unlist(databaseConfig[["user"]])
-                    pwd  <- unlist(databaseConfig[["pwd"]])
-                    db   <- unlist(databaseConfig[["db"]])
-                    type <- unlist(databaseConfig[["type"]])
+                    
+                    if (is.na(.self$databaseName)) {
+                        .self$databaseName <- "common"
+                    }
+                    
+                    host <- unlist(databaseConfig[[.self$databaseName]][["host"]])
+                    port <- unlist(databaseConfig[[.self$databaseName]][["port"]])
+                    user <- unlist(databaseConfig[[.self$databaseName]][["user"]])
+                    pwd  <- unlist(databaseConfig[[.self$databaseName]][["pwd"]])
+                    db   <- unlist(databaseConfig[[.self$databaseName]][["db"]])
+                    type <- unlist(databaseConfig[[.self$databaseName]][["type"]])
                     
                     switch (type,
                             mysql   = {
@@ -56,8 +64,7 @@ DataContext <- setRefClass(
                             },
                             
                             sqlite  = {
-                                .self$databaseConnection <- dbConnect(SQLite(),
-                                                                      host     = host)
+                                .self$databaseConnection <- dbConnect(SQLite(), host = host)
                             },
                             
                             pgsql   = {
@@ -131,14 +138,14 @@ DataContext <- setRefClass(
             tryCatch({
                 connect()
                 
-                print(paste0("[", as.character(Sys.Date(), format = "%d/%m/%Y"), "] [rarframeworkR:::DataContext$executeReader] [TRACE] - Executing SQL: ", sSql))
+                print(paste0("[", format(Sys.time(), "%d/%m/%Y %X"), "] [rarframeworkR:::DataContext$executeReader] [TRACE] - Executing SQL: ", sSql))
 
                 resultStatement <- dbGetQuery(databaseConnection, sSql)
                 rowCount        <- nrow(resultStatement)
                 
                 disconnect()
                 
-                print(paste0("[", as.character(Sys.Date(), format = "%d/%m/%Y"), "] [rarframeworkR:::DataContext$executeReader] [TRACE] - ", rowCount," registro(s) encontrado(s)"))
+                print(paste0("[", format(Sys.time(), "%d/%m/%Y %X"), "] [rarframeworkR:::DataContext$executeQuery] [TRACE] - ", rowCount," row(s) affected(s)"))
 
                 return (resultStatement)
             }, error = function (ex) {
@@ -150,14 +157,14 @@ DataContext <- setRefClass(
             tryCatch({
                 connect()
                 
-                print(paste0("[", as.character(Sys.Date(), format = "%d/%m/%Y"), "] [rarframeworkR:::DataContext$executeQuery] [TRACE] - Executing SQL: ", sSql))
+                print(paste0("[", format(Sys.time(), "%d/%m/%Y %X"), "] [rarframeworkR:::DataContext$executeQuery] [TRACE] - Executing SQL: ", sSql))
 
                 resultStatement <- dbSendStatement(databaseConnection, sSql)
                 rowCount        <- dbGetRowsAffected(resultStatement)
                 
                 disconnect()
                 
-                print(paste0("[", as.character(Sys.Date(), format = "%d/%m/%Y"), "] [rarframeworkR:::DataContext$executeQuery] [TRACE] - ", rowCount," registro(s) afetado(s)"))
+                print(paste0("[", format(Sys.time(), "%d/%m/%Y %X"), "] [rarframeworkR:::DataContext$executeQuery] [TRACE] - ", rowCount," row(s) affected(s)"))
             }, error = function (ex) {
                 stop (ex$message)
             })

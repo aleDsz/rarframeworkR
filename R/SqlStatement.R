@@ -25,14 +25,14 @@ SqlStatement <- setRefClass(
                                
                                character = {
                                    if (startsWith(propValue, "%") | endsWith(propValue, "%")) {
-                                       sqlValue <- paste0("LIKE ", trimws(shQuote(propValue)))
+                                       sqlValue <- paste0("LIKE ", trimws(shQuote(propValue, type = "sh")))
                                    } else {
-                                       sqlValue <- paste0("= ", trimws(shQuote(propValue)))
+                                       sqlValue <- paste0("= ", trimws(shQuote(propValue, type = "sh")))
                                    }
                                },
                                
                                Date = {
-                                   sqlValue <- paste0("= ", trimws(shQuote(propValue)))
+                                   sqlValue <- paste0("= ", trimws(shQuote(propValue, type = "sh")))
                                }
                         )
                     }
@@ -55,7 +55,7 @@ SqlStatement <- setRefClass(
                                    sqlValue <- paste0("IN (")
                                    
                                    for (prop in propValue) {
-                                       sqlValue <- paste0(sqlValue, trimws(shQuote(prop)), comma)
+                                       sqlValue <- paste0(sqlValue, trimws(shQuote(prop, type = "sh")), comma)
                                    }
                                    
                                    sqlValue <- substring(sqlValue, 1, nchar(sqlValue) - nchar(comma))
@@ -63,7 +63,11 @@ SqlStatement <- setRefClass(
                                },
                                
                                Date = {
-                                   sqlValue <- paste0("BETWEEN ", trimws(shQuote(propValue[1])), " AND ", trimws(shQuote(propValue[2])))
+                                   if (propValue[1] == propValue[2]) {
+                                       sqlValue <- paste0("= ", trimws(shQuote(propValue[1], type = "sh")))
+                                   } else {
+                                       sqlValue <- paste0("BETWEEN ", trimws(shQuote(propValue[1], type = "sh")), " AND ", trimws(shQuote(propValue[2], type = "sh")))
+                                   }
                                }
                         )
                     }

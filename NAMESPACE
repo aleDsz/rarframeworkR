@@ -2,7 +2,6 @@
 
 exportClasses(CommandContext)
 exportClasses(DataContext)
-exportClasses(DatabaseFactory)
 exportClasses(DefaultQueryBuilder)
 exportClasses(DeleteQueryBuilder)
 exportClasses(InsertQueryBuilder)
