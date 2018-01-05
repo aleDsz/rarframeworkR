@@ -8,6 +8,7 @@
 #' @importFrom jsonlite fromJSON
 #' @import DBI
 #' @import RMySQL
+#' @import RMariaDB
 #' @exportClass DataContext
 #'
 DataContext <- setRefClass(
@@ -15,19 +16,19 @@ DataContext <- setRefClass(
     
     fields = list(
         
-        databaseConnection = "MySQLConnection",
+        databaseConnection = "DBIConnection",
         databaseName       = "character"
         
     ),
     
     methods = list(
 
-        initialize = function(databaseName) {
+        initialize = function(databaseName = "common") {
             tryCatch({
                 .self$databaseName <- databaseName
                 
-                if (is.null(databaseConnection))
-                    createConnection()
+                if (is.null(.self$databaseConnection))
+                    .self$createConnection()
             }, error = function (ex) {
                 stop (ex$message)
             })
@@ -55,12 +56,11 @@ DataContext <- setRefClass(
                     
                     switch (type,
                             mysql   = {
-                                .self$databaseConnection <- dbConnect(MySQL(),
-                                                                      user     = user,
-                                                                      password = pwd,
-                                                                      dbname   = db,
-                                                                      host     = host,
-                                                                      post     = port)
+                                .self$databaseConnection <- dbConnect(MySQL(), user = user, password = pwd, dbname = db, host = host, post = port)
+                            },
+                            
+                            mariadb = {
+                                .self$databaseConnection <- dbConnect(MariaDB(), user = user, password = pwd, dbname = db, host = host, port = port)
                             },
                             
                             sqlite  = {
@@ -68,12 +68,7 @@ DataContext <- setRefClass(
                             },
                             
                             pgsql   = {
-                                .self$databaseConnection <- dbConnect(PostgreSQL(),
-                                                                      user     = user,
-                                                                      password = pwd,
-                                                                      dbname   = db,
-                                                                      host     = host,
-                                                                      post     = port)
+                                .self$databaseConnection <- dbConnect(PostgreSQL(), user = user, password = pwd, dbname = db, host = host, post = port)
                             }
                     )
                 }

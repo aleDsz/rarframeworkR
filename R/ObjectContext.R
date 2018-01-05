@@ -11,13 +11,10 @@ ObjectContext <- setRefClass(
     "ObjectContext",
 
     fields = list(
-
         object = "ANY"
-
     ),
 
     methods = list(
-
         initialize = function(Object = NULL) {
             .self$object <- Object
         },
@@ -59,6 +56,12 @@ ObjectContext <- setRefClass(
 
         getObjects = function(dataReader = data.frame()) {
             tryCatch({
+                for (field in names(dataReader)) {
+                    if (grepl("date", field)) {
+                        dataReader[, field] <- as.Date(dataReader[, field])
+                    }
+                }
+                
                 return (dataReader)
             }, error = function(ex) {
                 stop (ex$message)
@@ -145,7 +148,7 @@ ObjectContext <- setRefClass(
                                
                                Date = {
                                    if (!is.na(dataFrame[1, fieldName])) {
-                                       .self$object[[fieldName]] <- as.character(dataFrame[[fieldName]])
+                                       .self$object[[fieldName]] <- as.Date(dataFrame[[fieldName]])
                                    }
                                },
                                
@@ -163,6 +166,5 @@ ObjectContext <- setRefClass(
                 stop (ex$message)
             })
         }
-
     )
 )
