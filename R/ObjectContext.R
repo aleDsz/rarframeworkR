@@ -77,7 +77,7 @@ ObjectContext <- setRefClass(
 
                     property$setValues(
                         propertyName,
-                        ifelse(grepl("date", propertyName), "Date", class(.self$object[[propertyName]])),
+                        class(.self$object[[propertyName]]),
                         ifelse(grepl("id$", propertyName), TRUE, FALSE),
                         .self$object[[propertyName]]
                     )
