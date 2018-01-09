@@ -119,12 +119,12 @@ ObjectContext <- setRefClass(
 
         fillObject = function(dataFrame) {
             tryCatch({
-                listProps  <- getProperties()
+                listProps  <- .self$getProperties()
                 fieldNames <- as.list(names(dataFrame))
                 
                 for (i in { 1 : length(fieldNames) }) {
                     fieldName <- fieldNames[[i]]
-                    prop      <- listProps[sapply(listProps, function(x) x$fieldName == fieldName)]
+                    prop <- listProps[sapply(listProps, function(x) x$fieldName == fieldName)]
                     
                     if (length(prop) > 0) {
                         switch(prop[[1]]$type,
