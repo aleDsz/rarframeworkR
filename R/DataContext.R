@@ -87,7 +87,7 @@ DataContext <- setRefClass(
 
         disconnect = function() {
             tryCatch({
-                dbDisconnect(.self$databaseConnection)
+                lapply(dbListConnections(MySQL()), dbDisconnect)
             }, error = function (ex) {
                 stop (ex$message)
             })
