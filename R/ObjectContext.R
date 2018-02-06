@@ -21,7 +21,7 @@ ObjectContext <- setRefClass(
 
         getProperties = function() {
             tryCatch({
-                listProps  <- list()
+                listProps <- list()
                 properties <- as.list(names((.self$object$getClass())@fieldClasses))
 
                 if (length(properties) > 0) {
@@ -75,12 +75,21 @@ ObjectContext <- setRefClass(
                 if (nchar(propertyName) > 0) {
                     property <- Property$new()
 
-                    property$setValues(
-                        propertyName,
-                        class(.self$object[[propertyName]]),
-                        ifelse(grepl("id$", propertyName), TRUE, FALSE),
-                        .self$object[[propertyName]]
-                    )
+                    if (grepl("date", propertyName)) {
+                        property$setValues(
+                            propertyName,
+                            "Date",
+                            ifelse(grepl("id$", propertyName), TRUE, FALSE),
+                            .self$object[[propertyName]]
+                        )
+                    } else {
+                        property$setValues(
+                            propertyName,
+                            class(.self$object[[propertyName]]),
+                            ifelse(grepl("id$", propertyName), TRUE, FALSE),
+                            .self$object[[propertyName]]
+                        )
+                    }
                 }
 
                 return (property)
@@ -119,46 +128,44 @@ ObjectContext <- setRefClass(
 
         fillObject = function(dataFrame) {
             tryCatch({
-                listProps  <- .self$getProperties()
+                listProps <- .self$getProperties()
                 fieldNames <- as.list(names(dataFrame))
                 
                 for (i in { 1 : length(fieldNames) }) {
                     fieldName <- fieldNames[[i]]
-                    prop <- listProps[sapply(listProps, function(x) x$fieldName == fieldName)]
+                    prop <- listProps[sapply(listProps, function(x) x$fieldName == fieldName)][[1]]
                     
-                    if (length(prop) > 0) {
-                        switch(prop[[1]]$type,
-                               numeric = {
-                                   if (!is.na(dataFrame[1, fieldName])) {
-                                       .self$object[[fieldName]] <- as.numeric(dataFrame[[fieldName]])
-                                   }
-                               },
-                               
-                               integer = {
-                                   if (!is.na(dataFrame[1, fieldName])) {
-                                       .self$object[[fieldName]] <- as.integer(dataFrame[[fieldName]])
-                                   }
-                               },
-                               
-                               character = {
-                                   if (!is.na(dataFrame[1, fieldName])) {
-                                       .self$object[[fieldName]] <- as.character(dataFrame[[fieldName]])
-                                   }
-                               },
-                               
-                               Date = {
-                                   if (!is.na(dataFrame[1, fieldName])) {
-                                       .self$object[[fieldName]] <- as.Date(dataFrame[[fieldName]])
-                                   }
-                               },
-                               
-                               POSIXct = {
-                                   if (!is.na(dataFrame[1, fieldName])) {
-                                       .self$object[[fieldName]] <- as.POSIXct(dataFrame[[fieldName]])
-                                   }
+                    switch(prop$type,
+                           numeric = {
+                               if (!is.na(dataFrame[1, fieldName])) {
+                                   .self$object[[fieldName]] <- as.numeric(dataFrame[[fieldName]])
                                }
-                        )
-                    }
+                           },
+                           
+                           integer = {
+                               if (!is.na(dataFrame[1, fieldName])) {
+                                   .self$object[[fieldName]] <- as.integer(dataFrame[[fieldName]])
+                               }
+                           },
+                           
+                           character = {
+                               if (!is.na(dataFrame[1, fieldName])) {
+                                   .self$object[[fieldName]] <- as.character(dataFrame[[fieldName]])
+                               }
+                           },
+                           
+                           Date = {
+                               if (!is.na(dataFrame[1, fieldName])) {
+                                   .self$object[[fieldName]] <- as.Date(dataFrame[[fieldName]])
+                               }
+                           },
+                           
+                           POSIXct = {
+                               if (!is.na(dataFrame[1, fieldName])) {
+                                   .self$object[[fieldName]] <- as.POSIXct(dataFrame[[fieldName]])
+                               }
+                           }
+                    )
                 }
 
                 return (.self$object)
