@@ -26,7 +26,7 @@ ObjectContext <- setRefClass(
 
                 if (length(properties) > 0) {
                     for (prop in properties) {
-                        listProps <- c(listProps, getCustomAttributes(prop))
+                        listProps <- c(listProps, .self$getCustomAttributes(prop))
                     }
                 }
 

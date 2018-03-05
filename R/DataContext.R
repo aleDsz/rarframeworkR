@@ -15,10 +15,8 @@ DataContext <- setRefClass(
     "DataContext",
     
     fields = list(
-        
         databaseConnection = "DBIConnection",
-        databaseName       = "character"
-        
+        databaseName = "character"
     ),
     
     methods = list(
@@ -133,14 +131,14 @@ DataContext <- setRefClass(
             tryCatch({
                 .self$connect()
                 
-                print(paste0("[", format(Sys.time(), "%d/%m/%Y %X"), "] [rarframeworkR:::DataContext$executeReader] [TRACE] - Executing SQL: ", sSql))
+                message(paste0("[", format(Sys.time(), "%d/%m/%Y %X"), "] [rarframeworkR:::DataContext$executeReader] [TRACE] - Executing SQL: ", sSql))
 
                 resultStatement <- dbGetQuery(.self$databaseConnection, sSql)
                 rowCount <- nrow(resultStatement)
                 
                 .self$disconnect()
                 
-                print(paste0("[", format(Sys.time(), "%d/%m/%Y %X"), "] [rarframeworkR:::DataContext$executeQuery] [TRACE] - ", rowCount, " row(s) affected"))
+                message(paste0("[", format(Sys.time(), "%d/%m/%Y %X"), "] [rarframeworkR:::DataContext$executeQuery] [TRACE] - ", rowCount, " row(s) affected"))
 
                 return (resultStatement)
             }, error = function (ex) {
@@ -152,14 +150,14 @@ DataContext <- setRefClass(
             tryCatch({
                 .self$connect()
                 
-                print(paste0("[", format(Sys.time(), "%d/%m/%Y %X"), "] [rarframeworkR:::DataContext$executeQuery] [TRACE] - Executing SQL: ", sSql))
+                message(paste0("[", format(Sys.time(), "%d/%m/%Y %X"), "] [rarframeworkR:::DataContext$executeQuery] [TRACE] - Executing SQL: ", sSql))
 
                 resultStatement <- dbSendStatement(.self$databaseConnection, sSql)
                 rowCount <- dbGetRowsAffected(resultStatement)
                 
                 .self$disconnect()
                 
-                print(paste0("[", format(Sys.time(), "%d/%m/%Y %X"), "] [rarframeworkR:::DataContext$executeQuery] [TRACE] - ", rowCount, " row(s) affected"))
+                message(paste0("[", format(Sys.time(), "%d/%m/%Y %X"), "] [rarframeworkR:::DataContext$executeQuery] [TRACE] - ", rowCount, " row(s) affected"))
             }, error = function (ex) {
                 stop (ex$message)
             })
