@@ -2,6 +2,7 @@
 #'
 #' @aliases CommandContext
 #' @importFrom methods setRefClass
+#' @export CommandContext CommandContext
 #' @exportClass CommandContext
 #'
 CommandContext <- setRefClass(

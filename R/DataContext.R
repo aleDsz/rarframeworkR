@@ -9,6 +9,7 @@
 #' @import DBI
 #' @import RMySQL
 #' @import RMariaDB
+#' @export DataContext DataContext
 #' @exportClass DataContext
 #'
 DataContext <- setRefClass(

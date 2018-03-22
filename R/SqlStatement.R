@@ -70,6 +70,8 @@ SqlStatement <- setRefClass(
                                    }
                                }
                         )
+                    } else {
+                        sqlValue <- "= null"
                     }
                 }
 

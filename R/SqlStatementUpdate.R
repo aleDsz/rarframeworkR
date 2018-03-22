@@ -2,6 +2,7 @@
 #'
 #' @aliases SqlStatementUpdate
 #' @importFrom methods setRefClass
+#' @export SqlStatementUpdate SqlStatementUpdate
 #' @exportClass SqlStatementUpdate
 #'
 SqlStatementUpdate <- setRefClass(

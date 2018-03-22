@@ -2,6 +2,7 @@
 #'
 #' @aliases SqlStatementDelete
 #' @importFrom methods setRefClass
+#' @export SqlStatementDelete SqlStatementDelete
 #' @exportClass SqlStatementDelete
 #'
 SqlStatementDelete <- setRefClass(

@@ -2,6 +2,7 @@
 #'
 #' @aliases DefaultQueryBuilder
 #' @importFrom methods setRefClass
+#' @export DefaultQueryBuilder DefaultQueryBuilder
 #' @exportClass DefaultQueryBuilder
 #'
 DefaultQueryBuilder <- setRefClass(

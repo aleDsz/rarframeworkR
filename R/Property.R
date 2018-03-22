@@ -2,6 +2,7 @@
 #'
 #' @aliases Property
 #' @importFrom methods setRefClass
+#' @export Property Property
 #' @exportClass Property
 #'
 Property <- setRefClass(

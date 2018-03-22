@@ -5,6 +5,7 @@
 #'
 #' @aliases ObjectContext
 #' @importFrom methods setRefClass
+#' @export ObjectContext ObjectContext
 #' @exportClass ObjectContext
 #'
 ObjectContext <- setRefClass(

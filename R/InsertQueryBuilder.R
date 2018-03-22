@@ -2,6 +2,7 @@
 #'
 #' @aliases InsertQueryBuilder
 #' @importFrom methods setRefClass
+#' @export InsertQueryBuilder InsertQueryBuilder
 #' @exportClass InsertQueryBuilder
 #'
 InsertQueryBuilder <- setRefClass(

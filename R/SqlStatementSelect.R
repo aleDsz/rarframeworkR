@@ -2,6 +2,7 @@
 #'
 #' @aliases SqlStatementSelect
 #' @importFrom methods setRefClass
+#' @export SqlStatementSelect SqlStatementSelect
 #' @exportClass SqlStatementSelect
 #'
 SqlStatementSelect <- setRefClass(

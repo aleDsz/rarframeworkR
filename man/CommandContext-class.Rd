@@ -2,8 +2,8 @@
 % Please edit documentation in R/CommandContext.R
 \docType{class}
 \name{CommandContext-class}
-\alias{CommandContext-class}
 \alias{CommandContext}
+\alias{CommandContext-class}
 \title{Classe para execução de instruções SQL}
 \description{
 Classe para execução de instruções SQL
