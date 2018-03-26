@@ -50,11 +50,11 @@ SqlStatementUpdate <- setRefClass(
                 
                 for (prop in listNonPks) {
                     updateQueryBuilder$addField(prop$fieldName)
-                    updateQueryBuilder$addValue(prop$value)
+                    updateQueryBuilder$addValue(as.character(prop$value))
                 }
                 
                 for (prop in listPks) {
-                    updateQueryBuilder$addWhere(paste0(prop$fieldName, " ", getQuotedValue(prop$value, prop$type)))
+                    updateQueryBuilder$addWhere(paste0(prop$fieldName, " ", getQuotedValue(as.character(prop$value), prop$type)))
                 }
                 
                 sSql <<- updateQueryBuilder$toString()

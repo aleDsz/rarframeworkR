@@ -17,6 +17,14 @@ SqlStatement <- setRefClass(
 
                 if (length(propValue) == 1) {
                     if (!is.null(propValue) & !is.null(type)) {
+                        if (is.na(propValue)) {
+                            return ("= null")
+                        }
+                        
+                        if (propValue == "NA") {
+                            return ("= null")
+                        }
+                        
                         switch(type,
                                numeric = ,
                                integer = {
@@ -70,8 +78,6 @@ SqlStatement <- setRefClass(
                                    }
                                }
                         )
-                    } else {
-                        sqlValue <- "= null"
                     }
                 }
 

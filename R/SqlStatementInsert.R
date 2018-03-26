@@ -33,7 +33,7 @@ SqlStatementInsert <- setRefClass(
                 
                 for (prop in listProps) {
                     insertQueryBuilder$addField(prop$fieldName)
-                    insertQueryBuilder$addValue(prop$value)
+                    insertQueryBuilder$addValue(as.character(prop$value))
                 }
                 
                 sSql <<- insertQueryBuilder$toString()

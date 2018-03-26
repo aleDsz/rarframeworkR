@@ -39,17 +39,11 @@ ObjectContext <- setRefClass(
 
         getObject = function(dataReader = data.frame()) {
             tryCatch({
-                listProps <- getProperties()
-
-                if (!is.null(dataReader) & nrow(dataReader) > 0) {
-                    for (prop in listProps) {
-                        .self$object[[prop$fieldName]] <- dataReader[1, prop$fieldName]
-                    }
+                if (nrow(dataReader) == 1) {
+                    return (.self$fillObject(dataReader))
                 } else {
                     return (NULL)
                 }
-
-                return (.self$object)
             }, error = function(ex) {
                 stop (ex$message)
             })

@@ -89,6 +89,7 @@ DefaultQueryBuilder <- setRefClass(
                 sSql       <- character(0)
                 comma      <- ", "
                 sSql       <- paste(trimws(shQuote(.self$valueList, type = "sh")), collapse = comma, sep = "")
+                sSql <- stringr::str_replace_all(sSql, "'NA'", "null")
                 
                 return (sSql)
             }, error = function(ex) {
@@ -101,6 +102,7 @@ DefaultQueryBuilder <- setRefClass(
                 sSql       <- character(0)
                 comma      <- ", "
                 sSql       <- paste(.self$fieldList, " = ", trimws(paste0("'", .self$valueList, "'")), collapse = comma, sep = "")
+                sSql <- stringr::str_replace_all(sSql, "= 'NA'", "= null")
                 
                 return (sSql)
             }, error = function(ex) {

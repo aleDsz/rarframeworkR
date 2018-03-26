@@ -44,7 +44,7 @@ SqlStatementDelete <- setRefClass(
                     stop ("Informar pelo menos 1 Primary Key")
                 
                 for (prop in listPks) {
-                    deleteQueryBuilder$addWhere(paste0(prop$fieldName, " ", getQuotedValue(prop$value, prop$type)))
+                    deleteQueryBuilder$addWhere(paste0(prop$fieldName, " ", getQuotedValue(as.character(prop$value), prop$type)))
                 }
                 
                 sSql <<- deleteQueryBuilder$toString()
