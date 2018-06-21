@@ -37,8 +37,13 @@ DataContext <- setRefClass(
             tryCatch({
                 databaseConfig <- NULL
                 
-                if (file.exists(paste0(getwd(), "/databaseConfig.json")))
+                if (nchar(Sys.getenv("RARFRAMEWORK_CONFIG")) > 0) {
+                    databaseConfig <- fromJSON(Sys.getenv("RARFRAMEWORK_CONFIG"))
+                } else if (file.exists(paste0(getwd(), "/databaseConfig.json"))) {
                     databaseConfig <- fromJSON(paste0(getwd(), "/databaseConfig.json"))
+                } else {
+                    stop ("databaseConfig.json not found")
+                }
                 
                 if (is.list(databaseConfig)) {
                     

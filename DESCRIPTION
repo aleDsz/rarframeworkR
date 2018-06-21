@@ -2,6 +2,7 @@ Package: rarframeworkR
 Type: Package
 Title: RAR Framework
 Version: 1.3.7
+Authors@R: c(person("Alexandre", "de Souza", "'aleDsz'", "alexandre@aledsz.com.br", role = c("aut", "cre")))
 Author: Alexandre de Souza <alexandre@aledsz.com.br>
 Maintainer: Alexandre de Souza <alexandre@aledsz.com.br>
 Description: ORM RAR Framework adaptado para a linguagem R com intuito de

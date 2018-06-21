@@ -53,7 +53,11 @@ ObjectContext <- setRefClass(
             tryCatch({
                 for (field in names(dataReader)) {
                     if (grepl("date", field)) {
-                        dataReader[, field] <- as.Date(dataReader[, field])
+                        dataReader[, field] <- tryCatch({
+                            as.Date(dataReader[, field])
+                        }, error = function (ex) {
+                            dataReader[, field]
+                        })
                     }
                 }
                 
