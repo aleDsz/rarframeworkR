@@ -155,7 +155,11 @@ ObjectContext <- setRefClass(
                            
                            Date = {
                                if (!is.na(dataFrame[1, fieldName])) {
-                                   .self$object[[fieldName]] <- as.Date(dataFrame[[fieldName]])
+                                   .self$object[[fieldName]] <- tryCatch({
+                                       as.Date(dataFrame[[fieldName]])
+                                   }, error = function (ex) {
+                                       dataFrame[[fieldName]]
+                                   })
                                }
                            },
                            
