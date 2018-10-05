@@ -23,6 +23,16 @@ SqlStatement <- setRefClass(
                                    sqlValue <- paste0("= ", propValue)
                                },
                                
+                               logical = {
+                                   if (propValue) {
+                                       propValue <- 1
+                                   } else {
+                                       propValue <- 0
+                                   }
+                                   
+                                   sqlValue <- paste0("= ", propValue)
+                               },
+                               
                                character = {
                                    if (startsWith(propValue, "%") | endsWith(propValue, "%")) {
                                        sqlValue <- paste0("LIKE ", trimws(shQuote(sqlValue, type = "sh")))
@@ -44,6 +54,23 @@ SqlStatement <- setRefClass(
                                    sqlValue <- paste0("IN (")
                                    
                                    for (prop in propValue) {
+                                       sqlValue <- paste0(sqlValue, prop, comma)
+                                   }
+                                   
+                                   sqlValue <- substring(sqlValue, 1, nchar(sqlValue) - nchar(comma))
+                                   sqlValue <- paste0(sqlValue, ")")
+                               },
+                               
+                               logical = {
+                                   sqlValue <- paste0("IN (")
+                                   
+                                   for (prop in propValue) {
+                                       if (prop) {
+                                           prop <- 1
+                                       } else {
+                                           prop <- 0
+                                       }
+                                       
                                        sqlValue <- paste0(sqlValue, prop, comma)
                                    }
                                    
