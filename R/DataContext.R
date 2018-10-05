@@ -8,26 +8,26 @@
 #' @importFrom jsonlite fromJSON
 #' @import DBI
 #' @import RMySQL
+#' @import RMariaDB
+#' @export DataContext DataContext
 #' @exportClass DataContext
 #'
 DataContext <- setRefClass(
     "DataContext",
     
     fields = list(
-        
-        databaseConnection = "MySQLConnection",
-        databaseName       = "character"
-        
+        databaseConnection = "DBIConnection",
+        databaseName = "character"
     ),
     
     methods = list(
 
-        initialize = function(databaseName) {
+        initialize = function(databaseName = "common") {
             tryCatch({
                 .self$databaseName <- databaseName
                 
-                if (is.null(databaseConnection))
-                    createConnection()
+                if (is.null(.self$databaseConnection))
+                    .self$createConnection()
             }, error = function (ex) {
                 stop (ex$message)
             })
@@ -35,10 +35,15 @@ DataContext <- setRefClass(
         
         createConnection = function() {
             tryCatch({
-                databaseConfig     <- NULL
+                databaseConfig <- NULL
                 
-                if (file.exists(paste0(getwd(), "/databaseConfig.json")))
+                if (nchar(Sys.getenv("RARFRAMEWORK_CONFIG")) > 0) {
+                    databaseConfig <- fromJSON(Sys.getenv("RARFRAMEWORK_CONFIG"))
+                } else if (file.exists(paste0(getwd(), "/databaseConfig.json"))) {
                     databaseConfig <- fromJSON(paste0(getwd(), "/databaseConfig.json"))
+                } else {
+                    stop ("databaseConfig.json not found")
+                }
                 
                 if (is.list(databaseConfig)) {
                     
@@ -55,12 +60,11 @@ DataContext <- setRefClass(
                     
                     switch (type,
                             mysql   = {
-                                .self$databaseConnection <- dbConnect(MySQL(),
-                                                                      user     = user,
-                                                                      password = pwd,
-                                                                      dbname   = db,
-                                                                      host     = host,
-                                                                      post     = port)
+                                .self$databaseConnection <- dbConnect(MySQL(), user = user, password = pwd, dbname = db, host = host, post = port)
+                            },
+                            
+                            mariadb = {
+                                .self$databaseConnection <- dbConnect(MariaDB(), user = user, password = pwd, dbname = db, host = host, port = port)
                             },
                             
                             sqlite  = {
@@ -68,12 +72,7 @@ DataContext <- setRefClass(
                             },
                             
                             pgsql   = {
-                                .self$databaseConnection <- dbConnect(PostgreSQL(),
-                                                                      user     = user,
-                                                                      password = pwd,
-                                                                      dbname   = db,
-                                                                      host     = host,
-                                                                      post     = port)
+                                .self$databaseConnection <- dbConnect(PostgreSQL(), user = user, password = pwd, dbname = db, host = host, post = port)
                             }
                     )
                 }
@@ -92,7 +91,7 @@ DataContext <- setRefClass(
 
         disconnect = function() {
             tryCatch({
-                dbDisconnect(.self$databaseConnection)
+                lapply(dbListConnections(MySQL()), dbDisconnect)
             }, error = function (ex) {
                 stop (ex$message)
             })
@@ -100,11 +99,11 @@ DataContext <- setRefClass(
 
         beginTransaction = function() {
             tryCatch({
-                if (is.null(databaseConnection)) {
+                if (is.null(.self$databaseConnection)) {
                     connect()
                 }
 
-                dbBegin(databaseConnection)
+                dbBegin(.self$databaseConnection)
             }, error = function (ex) {
                 stop (ex$message)
             })
@@ -112,11 +111,11 @@ DataContext <- setRefClass(
 
         commitTransaction = function() {
             tryCatch({
-                if (is.null(databaseConnection)) {
+                if (is.null(.self$databaseConnection)) {
                     stop ("Conexão não encontrada")
                 }
 
-                dbCommit(databaseConnection)
+                dbCommit(.self$databaseConnection)
             }, error = function (ex) {
                 stop (ex$message)
             })
@@ -124,11 +123,11 @@ DataContext <- setRefClass(
 
         rollbackTransaction = function() {
             tryCatch({
-                if (is.null(databaseConnection)) {
+                if (is.null(.self$databaseConnection)) {
                     stop ("Conexão não encontrada")
                 }
 
-                dbRollback(databaseConnection)
+                dbRollback(.self$databaseConnection)
             }, error = function (ex) {
                 stop (ex$message)
             })
@@ -136,16 +135,16 @@ DataContext <- setRefClass(
 
         executeReader = function(sSql) {
             tryCatch({
-                connect()
+                .self$connect()
                 
-                print(paste0("[", format(Sys.time(), "%d/%m/%Y %X"), "] [rarframeworkR:::DataContext$executeReader] [TRACE] - Executing SQL: ", sSql))
+                message(paste0("[", format(Sys.time(), "%d/%m/%Y %X"), "] [rarframeworkR:::DataContext$executeReader] [TRACE] - Executing SQL: ", sSql))
 
-                resultStatement <- dbGetQuery(databaseConnection, sSql)
-                rowCount        <- nrow(resultStatement)
+                resultStatement <- dbGetQuery(.self$databaseConnection, sSql)
+                rowCount <- nrow(resultStatement)
                 
-                disconnect()
+                .self$disconnect()
                 
-                print(paste0("[", format(Sys.time(), "%d/%m/%Y %X"), "] [rarframeworkR:::DataContext$executeQuery] [TRACE] - ", rowCount," row(s) affected(s)"))
+                message(paste0("[", format(Sys.time(), "%d/%m/%Y %X"), "] [rarframeworkR:::DataContext$executeQuery] [TRACE] - ", rowCount, " row(s) affected"))
 
                 return (resultStatement)
             }, error = function (ex) {
@@ -155,16 +154,16 @@ DataContext <- setRefClass(
 
         executeQuery = function(sSql) {
             tryCatch({
-                connect()
+                .self$connect()
                 
-                print(paste0("[", format(Sys.time(), "%d/%m/%Y %X"), "] [rarframeworkR:::DataContext$executeQuery] [TRACE] - Executing SQL: ", sSql))
+                message(paste0("[", format(Sys.time(), "%d/%m/%Y %X"), "] [rarframeworkR:::DataContext$executeQuery] [TRACE] - Executing SQL: ", sSql))
 
-                resultStatement <- dbSendStatement(databaseConnection, sSql)
-                rowCount        <- dbGetRowsAffected(resultStatement)
+                resultStatement <- dbSendStatement(.self$databaseConnection, sSql)
+                rowCount <- dbGetRowsAffected(resultStatement)
                 
-                disconnect()
+                .self$disconnect()
                 
-                print(paste0("[", format(Sys.time(), "%d/%m/%Y %X"), "] [rarframeworkR:::DataContext$executeQuery] [TRACE] - ", rowCount," row(s) affected(s)"))
+                message(paste0("[", format(Sys.time(), "%d/%m/%Y %X"), "] [rarframeworkR:::DataContext$executeQuery] [TRACE] - ", rowCount, " row(s) affected"))
             }, error = function (ex) {
                 stop (ex$message)
             })

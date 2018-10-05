@@ -2,8 +2,8 @@
 % Please edit documentation in R/Property.R
 \docType{class}
 \name{Property-class}
-\alias{Property-class}
 \alias{Property}
+\alias{Property-class}
 \title{Classe para armazenar metadados dos objetos}
 \description{
 Classe para armazenar metadados dos objetos

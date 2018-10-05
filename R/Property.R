@@ -2,39 +2,34 @@
 #'
 #' @aliases Property
 #' @importFrom methods setRefClass
-#' @exportClass Property
 #'
 Property <- setRefClass(
     "Property",
 
     fields = list(
-
-        fieldName	= "character",
-        type		= "character",
-        primaryKey	= "logical",
-        value		= "ANY"
-
+        fieldName = "character",
+        type = "character",
+        primaryKey = "logical",
+        value = "ANY"
     ),
 
     methods = list(
-
         initialize = function() {
-            fieldName	<<- character(1)
-            type		<<- character(1)
-            primaryKey	<<- FALSE
-            value		<<- NULL
+            .self$fieldName <- character(1)
+            .self$type <- character(1)
+            .self$primaryKey <- FALSE
+            .self$value <- NULL
         },
 
-        setValues = function(FieldName, Type, PrimaryKey, Value) {
+        setValues = function(field_name, type, primary_key, value) {
             tryCatch({
-                fieldName   <<- FieldName
-                type        <<- Type
-                primaryKey  <<- PrimaryKey
-                value       <<- Value
+                .self$fieldName <- field_name
+                .self$type <- type
+                .self$primaryKey <- primary_key
+                .self$value <- value
             }, error = function(ex) {
                 stop (ex$message)
             })
         }
-
     )
 )

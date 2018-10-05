@@ -2,6 +2,7 @@
 #'
 #' @aliases UpdateQueryBuilder
 #' @importFrom methods setRefClass
+#' @export UpdateQueryBuilder UpdateQueryBuilder
 #' @exportClass UpdateQueryBuilder
 #'
 UpdateQueryBuilder <- setRefClass(
@@ -14,7 +15,7 @@ UpdateQueryBuilder <- setRefClass(
         toString = function() {
             tryCatch({
                 sSql <- paste0("UPDATE ", getFromClause())
-                sSql <- paste0("   SET ", getSetClause())
+                sSql <- paste0(sSql, " SET ", getSetClause())
                 
                 if (length(whereList) > 0) {
                     sSql <- paste0(sSql, " WHERE ", getWhereClause())

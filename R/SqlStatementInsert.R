@@ -2,6 +2,7 @@
 #'
 #' @aliases SqlStatementInsert
 #' @importFrom methods setRefClass
+#' @export SqlStatementInsert SqlStatementInsert
 #' @exportClass SqlStatementInsert
 #'
 SqlStatementInsert <- setRefClass(
@@ -32,7 +33,7 @@ SqlStatementInsert <- setRefClass(
                 
                 for (prop in listProps) {
                     insertQueryBuilder$addField(prop$fieldName)
-                    insertQueryBuilder$addValue(prop$value)
+                    insertQueryBuilder$addValue(as.character(prop$value))
                 }
                 
                 sSql <<- insertQueryBuilder$toString()

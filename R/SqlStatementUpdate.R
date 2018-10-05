@@ -2,6 +2,7 @@
 #'
 #' @aliases SqlStatementUpdate
 #' @importFrom methods setRefClass
+#' @export SqlStatementUpdate SqlStatementUpdate
 #' @exportClass SqlStatementUpdate
 #'
 SqlStatementUpdate <- setRefClass(
@@ -27,18 +28,20 @@ SqlStatementUpdate <- setRefClass(
             tryCatch({
                 objectContext      <- ObjectContext$new(object)
                 listProps          <- objectContext$getProperties()
-                listPks            <- list();
-                listNonPks         <- list();
+                listPks            <- list()
+                listNonPks         <- list()
                 updateQueryBuilder <- UpdateQueryBuilder$new()
                 updateQueryBuilder$addFrom(objectContext$getTableName())
                 
                 for (prop in listProps) {
                     if (prop$primaryKey) {
-                        if (length(prop$value) > 0) {
+                        if (length(prop$value) > 0 & prop$fieldName == "id") {
                             listPks <- c(listPks, prop)
+                        } else {
+                            listNonPks <- c(listNonPks, prop)
                         }
                     } else {
-                        listNonPks  <- c(listNonPks, prop)
+                        listNonPks <- c(listNonPks, prop)
                     }
                 }
                 
@@ -47,11 +50,11 @@ SqlStatementUpdate <- setRefClass(
                 
                 for (prop in listNonPks) {
                     updateQueryBuilder$addField(prop$fieldName)
-                    updateQueryBuilder$addValue(prop$value)
+                    updateQueryBuilder$addValue(as.character(prop$value))
                 }
                 
                 for (prop in listPks) {
-                    updateQueryBuilder$addWhere(paste0(prop$fieldName, " ", getQuotedValue(prop$value, prop$type)))
+                    updateQueryBuilder$addWhere(paste0(prop$fieldName, " ", getQuotedValue(as.character(prop$value), prop$type)))
                 }
                 
                 sSql <<- updateQueryBuilder$toString()
