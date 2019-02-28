@@ -9,6 +9,7 @@
 #' @import DBI
 #' @import RMySQL
 #' @import RMariaDB
+#' @import RPostgreSQL
 #' @export DataContext DataContext
 #' @exportClass DataContext
 #'
@@ -72,7 +73,7 @@ DataContext <- setRefClass(
                             },
                             
                             pgsql   = {
-                                .self$databaseConnection <- dbConnect(PostgreSQL(), user = user, password = pwd, dbname = db, host = host, post = port)
+                                .self$databaseConnection <- dbConnect(PostgreSQL(), user = user, password = pwd, dbname = db, host = host, port = port)
                             }
                     )
                 }
