@@ -7,9 +7,6 @@
 #' @importFrom methods setRefClass
 #' @importFrom jsonlite fromJSON
 #' @import DBI
-#' @import RMySQL
-#' @import RMariaDB
-#' @import RPostgreSQL
 #' @export DataContext DataContext
 #' @exportClass DataContext
 #'
@@ -61,19 +58,19 @@ DataContext <- setRefClass(
                     
                     switch (type,
                             mysql   = {
-                                .self$databaseConnection <- dbConnect(MySQL(), user = user, password = pwd, dbname = db, host = host, post = port)
+                                .self$databaseConnection <- dbConnect(RMySQL::MySQL(), user = user, password = pwd, dbname = db, host = host, post = port)
                             },
                             
                             mariadb = {
-                                .self$databaseConnection <- dbConnect(MariaDB(), user = user, password = pwd, dbname = db, host = host, port = port)
+                                .self$databaseConnection <- dbConnect(RMariaDB::MariaDB(), user = user, password = pwd, dbname = db, host = host, port = port)
                             },
                             
                             sqlite  = {
-                                .self$databaseConnection <- dbConnect(SQLite(), host = host)
+                                .self$databaseConnection <- dbConnect(RSQLite::SQLite(), host = host)
                             },
                             
                             pgsql   = {
-                                .self$databaseConnection <- dbConnect(PostgreSQL(), user = user, password = pwd, dbname = db, host = host, port = port)
+                                .self$databaseConnection <- dbConnect(RPostgreSQL::PostgreSQL(), user = user, password = pwd, dbname = db, host = host, port = port)
                             }
                     )
                 }

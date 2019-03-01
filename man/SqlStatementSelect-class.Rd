@@ -2,8 +2,8 @@
 % Please edit documentation in R/SqlStatementSelect.R
 \docType{class}
 \name{SqlStatementSelect-class}
-\alias{SqlStatementSelect}
 \alias{SqlStatementSelect-class}
+\alias{SqlStatementSelect}
 \title{Classe para manipulação de String SQL para a função SELECT}
 \description{
 Classe para manipulação de String SQL para a função SELECT

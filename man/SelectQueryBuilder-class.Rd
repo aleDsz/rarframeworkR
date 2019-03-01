@@ -2,8 +2,8 @@
 % Please edit documentation in R/SelectQueryBuilder.R
 \docType{class}
 \name{SelectQueryBuilder-class}
-\alias{SelectQueryBuilder}
 \alias{SelectQueryBuilder-class}
+\alias{SelectQueryBuilder}
 \title{Classe para manipulação de String SQL para a função SELECT}
 \description{
 Classe para manipulação de String SQL para a função SELECT

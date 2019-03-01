@@ -2,8 +2,8 @@
 % Please edit documentation in R/DataContext.R
 \docType{class}
 \name{DataContext-class}
-\alias{DataContext}
 \alias{DataContext-class}
+\alias{DataContext}
 \title{Classe para acesso ao banco de dados
 Manipulação de transações
 Conexão

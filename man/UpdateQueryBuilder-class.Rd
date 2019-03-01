@@ -2,8 +2,8 @@
 % Please edit documentation in R/UpdateQueryBuilder.R
 \docType{class}
 \name{UpdateQueryBuilder-class}
-\alias{UpdateQueryBuilder}
 \alias{UpdateQueryBuilder-class}
+\alias{UpdateQueryBuilder}
 \title{Classe para manipulação de String SQL para a função UPDATE}
 \description{
 Classe para manipulação de String SQL para a função UPDATE

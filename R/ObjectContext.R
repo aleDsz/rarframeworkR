@@ -132,7 +132,13 @@ ObjectContext <- setRefClass(
                 
                 for (i in { 1 : length(fieldNames) }) {
                     fieldName <- fieldNames[[i]]
-                    prop <- listProps[sapply(listProps, function(x) x$fieldName == fieldName)][[1]]
+                    prop <- listProps[sapply(listProps, function(x) x$fieldName == fieldName)]
+                    
+                    if (length(prop) == 0) {
+                        next
+                    }
+                    
+                    prop <- prop[[1]]
                     
                     switch(prop$type,
                            numeric = {

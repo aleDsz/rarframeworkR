@@ -2,8 +2,8 @@
 % Please edit documentation in R/SqlStatementInsert.R
 \docType{class}
 \name{SqlStatementInsert-class}
-\alias{SqlStatementInsert}
 \alias{SqlStatementInsert-class}
+\alias{SqlStatementInsert}
 \title{Classe para manipulação de String SQL para a função INSERT}
 \description{
 Classe para manipulação de String SQL para a função INSERT
