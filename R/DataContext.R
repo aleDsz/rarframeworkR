@@ -6,8 +6,6 @@
 #' @aliases DataContext
 #' @importFrom methods setRefClass
 #' @importFrom jsonlite fromJSON
-#' @importFrom RJDBC JDBC
-#' @importFrom RMongo mongoDbConnect
 #' @import DBI
 #' @export DataContext DataContext
 #' @exportClass DataContext
@@ -80,17 +78,6 @@ DataContext <- setRefClass(
                                 .self$databaseConnection <- dbConnect(RPostgreSQL::PostgreSQL(), user = user, password = pwd, dbname = db, host = host, port = port)
                                 .self$databaseDriver <- RPostgreSQL::PostgreSQL()
                             },
-                            
-                            cassandra = {
-                                Cassandra <- JDBC("org.apache.cassandra.cql.jdbc.CassandraDriver", list.files("./lib", pattern = "jar$", full.names = T))
-                                .self$databaseConnection <- dbConnect(Cassandra, paste0("jdbc:cassandra://", host, ":", port, "/", db))
-                                .self$databaseDriver <- Cassandra
-                            },
-                            
-                            cassandra = {
-                                .self$databaseConnection <- RMongo::mongoDbConnect(db, host, port)
-                                .self$databaseDriver <- NULL
-                            }
                     )
                 }
             }, error = function (ex) {
