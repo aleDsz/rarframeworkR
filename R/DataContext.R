@@ -89,12 +89,12 @@ DataContext <- setRefClass(
                             },
                             
                             pgsql   = {
-                                .self$databaseConnection <- dbConnect(PostgreSQL(), user = user, password = pwd, dbname = db, host = host, post = port)
+                                .self$databaseConnection <- dbConnect(PostgreSQL(), user = user, password = pwd, dbname = db, host = host, port = port)
                                 .self$databaseDriver <- RPostgreSQL::PostgreSQL()
                             },
                             
                             postgres = {
-                                .self$databaseConnection <- dbConnect(PostgreSQL(), user = user, password = pwd, dbname = db, host = host, post = port)
+                                .self$databaseConnection <- dbConnect(PostgreSQL(), user = user, password = pwd, dbname = db, host = host, port = port)
                                 .self$databaseDriver <- RPostgreSQL::PostgreSQL()
                             }
                     )
