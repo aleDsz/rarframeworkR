@@ -2,8 +2,8 @@
 % Please edit documentation in R/SqlStatementUpdate.R
 \docType{class}
 \name{SqlStatementUpdate-class}
-\alias{SqlStatementUpdate}
 \alias{SqlStatementUpdate-class}
+\alias{SqlStatementUpdate}
 \title{Classe para manipulação de String SQL para a função UPDATE}
 \description{
 Classe para manipulação de String SQL para a função UPDATE

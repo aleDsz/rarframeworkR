@@ -1,1 +1,1 @@
-devtools::install_version(package = 'roxygen2', version = '5.0.1', repos = c(CRAN = "https://cran.rstudio.com"))
+devtools::install_version(package = 'roxygen2', version = '6.1.0', repos = c(CRAN = "https://cran.rstudio.com"))

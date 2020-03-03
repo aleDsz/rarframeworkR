@@ -7,8 +7,6 @@
 #' @importFrom methods setRefClass
 #' @importFrom jsonlite fromJSON
 #' @import DBI
-#' @import RMySQL
-#' @import RMariaDB
 #' @export DataContext DataContext
 #' @exportClass DataContext
 #'
@@ -17,7 +15,8 @@ DataContext <- setRefClass(
     
     fields = list(
         databaseConnection = "DBIConnection",
-        databaseName = "character"
+        databaseName = "character",
+        databaseDriver = "ANY"
     ),
     
     methods = list(
@@ -37,7 +36,9 @@ DataContext <- setRefClass(
             tryCatch({
                 databaseConfig <- NULL
                 
-                if (nchar(Sys.getenv("RARFRAMEWORK_CONFIG")) > 0) {
+                if (nchar(Sys.getenv("RARFRAMEWORK_ENV")) > 0) {
+                    databaseConfig <- fromJSON(paste0(getwd(), "/configs/", Sys.getenv("RARFRAMEWORK_ENV"), ".json"))
+                } else if (nchar(Sys.getenv("RARFRAMEWORK_CONFIG")) > 0) {
                     databaseConfig <- fromJSON(Sys.getenv("RARFRAMEWORK_CONFIG"))
                 } else if (file.exists(paste0(getwd(), "/databaseConfig.json"))) {
                     databaseConfig <- fromJSON(paste0(getwd(), "/databaseConfig.json"))
@@ -46,7 +47,6 @@ DataContext <- setRefClass(
                 }
                 
                 if (is.list(databaseConfig)) {
-                    
                     if (is.na(.self$databaseName)) {
                         .self$databaseName <- "common"
                     }
@@ -73,24 +73,29 @@ DataContext <- setRefClass(
                     }
                     
                     switch (type,
-                            mysql   = {
-                                .self$databaseConnection <- dbConnect(MySQL(), user = user, password = pwd, dbname = db, host = host, post = port)
+                            mysql = {
+                                .self$databaseConnection <- dbConnect(RMySQL::MySQL(), user = user, password = pwd, dbname = db, host = host, post = port)
+                                .self$databaseDriver <- RMySQL::MySQL()
                             },
                             
                             mariadb = {
-                                .self$databaseConnection <- dbConnect(MariaDB(), user = user, password = pwd, dbname = db, host = host, port = port)
+                                .self$databaseConnection <- dbConnect(RMariaDB::MariaDB(), user = user, password = pwd, dbname = db, host = host, port = port)
+                                .self$databaseDriver <- RMariaDB::MariaDB()
                             },
                             
-                            sqlite  = {
-                                .self$databaseConnection <- dbConnect(SQLite(), host = host)
+                            sqlite = {
+                                .self$databaseConnection <- dbConnect(RSQLite::SQLite(), host = host)
+                                .self$databaseDriver <- RSQLite::SQLite()
                             },
                             
                             pgsql   = {
                                 .self$databaseConnection <- dbConnect(PostgreSQL(), user = user, password = pwd, dbname = db, host = host, post = port)
+                                .self$databaseDriver <- RPostgreSQL::PostgreSQL()
                             },
                             
                             postgres = {
                                 .self$databaseConnection <- dbConnect(PostgreSQL(), user = user, password = pwd, dbname = db, host = host, post = port)
+                                .self$databaseDriver <- RPostgreSQL::PostgreSQL()
                             }
                     )
                 }
@@ -98,7 +103,7 @@ DataContext <- setRefClass(
                 stop (ex$message)
             })
         },
-
+        
         connect = function() {
             tryCatch({
                 createConnection()
@@ -106,10 +111,12 @@ DataContext <- setRefClass(
                 stop (ex$message)
             })
         },
-
+        
         disconnect = function() {
             tryCatch({
-                lapply(dbListConnections(MySQL()), dbDisconnect)
+                if (!is.null(.self$databaseDriver)) {
+                    lapply(dbListConnections(.self$databaseDriver), dbDisconnect)
+                }
             }, error = function (ex) {
                 stop (ex$message)
             })

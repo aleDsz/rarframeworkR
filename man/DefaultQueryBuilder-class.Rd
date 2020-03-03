@@ -2,8 +2,8 @@
 % Please edit documentation in R/DefaultQueryBuilder.R
 \docType{class}
 \name{DefaultQueryBuilder-class}
-\alias{DefaultQueryBuilder}
 \alias{DefaultQueryBuilder-class}
+\alias{DefaultQueryBuilder}
 \title{Classe para manipulação de String SQL genérica}
 \description{
 Classe para manipulação de String SQL genérica

@@ -2,8 +2,8 @@
 % Please edit documentation in R/DeleteQueryBuilder.R
 \docType{class}
 \name{DeleteQueryBuilder-class}
-\alias{DeleteQueryBuilder}
 \alias{DeleteQueryBuilder-class}
+\alias{DeleteQueryBuilder}
 \title{Classe para manipulação de String SQL para a função DELETE}
 \description{
 Classe para manipulação de String SQL para a função DELETE
