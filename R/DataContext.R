@@ -51,12 +51,26 @@ DataContext <- setRefClass(
                         .self$databaseName <- "common"
                     }
                     
-                    host <- unlist(databaseConfig[[.self$databaseName]][["host"]])
-                    port <- unlist(databaseConfig[[.self$databaseName]][["port"]])
-                    user <- unlist(databaseConfig[[.self$databaseName]][["user"]])
-                    pwd  <- unlist(databaseConfig[[.self$databaseName]][["pwd"]])
-                    db   <- unlist(databaseConfig[[.self$databaseName]][["db"]])
-                    type <- unlist(databaseConfig[[.self$databaseName]][["type"]])
+                    databaseConfig = databaseConfig[[.self$databaseName]]
+                    
+                    if (is.null(databaseConfig[["url"]])) {
+                        host <- unlist(databaseConfig[["host"]])
+                        port <- unlist(databaseConfig[["port"]])
+                        user <- unlist(databaseConfig[["user"]])
+                        pwd  <- unlist(databaseConfig[["pwd"]])
+                        db   <- unlist(databaseConfig[["db"]])
+                        type <- unlist(databaseConfig[["type"]])
+                    } else if (databaseConfig[["url"]] != "") {
+                        type <- strsplit(databaseConfig[["url"]], ":")[[1]][[1]]
+                        db <- strsplit(databaseConfig[["url"]], "/")[[1]]
+                        user <- strsplit(db[[3]], "@")[[1]][[1]]
+                        host <- strsplit(db[[3]], "@")[[1]][[2]]
+                        pwd <- strsplit(user, ":")[[1]][[2]]
+                        user <- strsplit(user, ":")[[1]][[1]]
+                        port <- strsplit(host, ":")[[1]][[2]]
+                        host <- strsplit(host, ":")[[1]][[1]]
+                        db <- db[[length(db)]]
+                    }
                     
                     switch (type,
                             mysql   = {
@@ -72,6 +86,10 @@ DataContext <- setRefClass(
                             },
                             
                             pgsql   = {
+                                .self$databaseConnection <- dbConnect(PostgreSQL(), user = user, password = pwd, dbname = db, host = host, post = port)
+                            },
+                            
+                            postgres = {
                                 .self$databaseConnection <- dbConnect(PostgreSQL(), user = user, password = pwd, dbname = db, host = host, post = port)
                             }
                     )
