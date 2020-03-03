@@ -12,4 +12,7 @@ Imports:
     RSQLite,
     RMySQL,
     pkgconfig,
-    jsonlite
+    jsonlite,
+    dplyr,
+    dbplyr,
+    rlang
